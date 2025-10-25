@@ -1,7 +1,8 @@
 import React, { FC } from 'react';
 import { Text, TouchableOpacity, TouchableOpacityProps } from 'react-native';
-import { useTheme } from '../../hooks/useTheme';
-import { themeConfig } from '../../theme.config';
+import { useTheme } from '@/hooks/useTheme';
+import { themeConfig } from '@/config/theme.config';
+
 
 interface IThemeButtonProps extends TouchableOpacityProps {
   size?: 'small' | 'medium' | 'large';
@@ -21,9 +22,8 @@ export const ThemedButton: FC<IThemeButtonProps> = ({
 }) => {
   const { theme } = useTheme();
   const btnConfig = themeConfig.button;
-  const txtConfig = themeConfig.text;
   const buttonStyle = btnConfig.variants[variant][theme];
-  const textStyle = txtConfig.variants[variant];
+  const textStyle = btnConfig.text[variant];
   const sizeStyle = btnConfig.sizes[size];
   const borderStyle = btnConfig.borders[border];
 

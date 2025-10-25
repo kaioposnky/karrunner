@@ -15,6 +15,20 @@ export const themeConfig = {
         dark: 'bg-transparent border-2 border-primary-light',
       },
     },
+    text: {
+      primary: {
+        light: 'text-white',
+        dark: 'text-white',
+      },
+      secondary: {
+        light: 'text-white',
+        dark: 'text-white',
+      },
+      outline: {
+        light: 'text-primary',
+        dark: 'text-primary-light',
+      },
+    },
     sizes: {
       small: 'px-4 py-2',
       medium: 'px-6 py-3',

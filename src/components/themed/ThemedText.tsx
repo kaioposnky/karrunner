@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import {Text, TextProps } from 'react-native';
-import {useTheme} from '../../hooks/useTheme';
+import {useTheme} from '@/hooks/useTheme';
 
 interface IThemeTextProps extends TextProps{
   variant: undefined | 'default' | 'title' | 'subtitle' | 'caption',
