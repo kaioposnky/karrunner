@@ -1,23 +1,10 @@
-import { useState, useCallback } from 'react';
+import { ThemeContext, ThemeContextType } from "@/context/ThemeContext";
+import { useContext } from "react";
 
-type Theme = "light" | "dark";
-
-interface UseTheme{
-  theme: Theme,
-  toggleTheme: () => void,
-  changeTheme: (theme:Theme) => void,
-}
-
-export const useTheme = () : UseTheme => {
-  const [theme, setTheme] = useState<Theme>("light");
-
-  const toggleTheme = useCallback(() => {
-    setTheme(prevState => prevState === "light" ? "dark" : "light");
-  }, [])
-
-  const changeTheme = useCallback((theme: Theme) => {
-    setTheme(theme)
-  }, [])
-
-  return {theme, toggleTheme, changeTheme};
+export const useTheme = () : ThemeContextType => {
+  const context = useContext(ThemeContext);
+  if (context === undefined) {
+    throw new Error('useTheme must be used within ThemeProvider');
+  }
+  return context;
 }
