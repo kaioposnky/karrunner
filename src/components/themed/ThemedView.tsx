@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { View, Text, ViewProps } from 'react-native';
+import { View, ViewProps } from 'react-native';
 import { themeConfig } from '@/config/theme.config';
 import { useTheme } from '@/hooks/useTheme';
 
@@ -23,7 +23,7 @@ export const ThemedView: FC<IThemeViewCenterHProps> = ({
     } else if (center === "both"){
       centerClasses = 'justify-center items-center';
     }
-    centerClasses = `flex ${centerClasses}`;
+    centerClasses = `flex-1 ${centerClasses}`;
   }
 
   return (

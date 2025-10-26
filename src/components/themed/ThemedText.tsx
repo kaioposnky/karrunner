@@ -3,7 +3,7 @@ import {Text, TextProps } from 'react-native';
 import {useTheme} from '@/hooks/useTheme';
 
 interface IThemeTextProps extends TextProps{
-  variant: undefined | 'default' | 'title' | 'subtitle' | 'caption',
+  variant?: 'default' | 'title' | 'subtitle' | 'caption',
 }
 
 const variantStyles = {
