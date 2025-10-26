@@ -5,8 +5,9 @@ import { ThemeProvider } from '@/context/ThemeContext';
 import { AuthProvider } from "./context/AuthContext";
 import { toastConfig } from "./config/toast.config";
 import Toast from 'react-native-toast-message';
+import { ReactNode } from 'react';
 
-const Providers = ({ children }: { children: React.ReactNode }) => {
+const Providers = ({ children }: { children: ReactNode }) => {
   return (
     <AuthProvider>
       <ThemeProvider>
