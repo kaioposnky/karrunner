@@ -1,32 +1,73 @@
+const colorPalette = {
+  primary: 'primary',
+  primaryLight: 'primary-light',
+  primaryDark: 'primary-dark',
+  secondary: 'secondary',
+  secondaryLight: 'secondary-light',
+  secondaryDark: 'secondary-dark',
+  backgroundLight: 'background-light',
+  backgroundDark: 'background-dark',
+  textLight: 'text-light',
+  textDark: 'text-dark',
+  white: 'white',
+};
+
+const themeTokens = {
+  light: {
+    btnPrimaryBg: `bg-${colorPalette.primary}`,
+    btnPrimaryBgActive: `active:bg-${colorPalette.primaryDark}`,
+    btnSecondaryBg: `bg-${colorPalette.secondary}`,
+    btnSecondaryBgActive: `active:bg-${colorPalette.secondaryDark}`,
+    btnOutlineBorder: `border-2 border-${colorPalette.primary}`,
+    btnPrimaryText: `text-${colorPalette.white}`,
+    btnSecondaryText: `text-${colorPalette.white}`,
+    btnOutlineText: `text-${colorPalette.primary}`,
+    viewBg: `bg-${colorPalette.backgroundLight}`,
+    text: `text-${colorPalette.textLight}`,
+  },
+  dark: {
+    btnPrimaryBg: `bg-${colorPalette.primaryLight}`,
+    btnPrimaryBgActive: `active:bg-${colorPalette.primary}`,
+    btnSecondaryBg: `bg-${colorPalette.secondaryLight}`,
+    btnSecondaryBgActive: `active:bg-${colorPalette.secondary}`,
+    btnOutlineBorder: `border-2 border-${colorPalette.primaryLight}`,
+    btnPrimaryText: `text-${colorPalette.white}`,
+    btnSecondaryText: `text-${colorPalette.white}`,
+    btnOutlineText: `text-${colorPalette.primaryLight}`,
+    viewBg: `bg-${colorPalette.backgroundDark}`,
+    text: `text-${colorPalette.textDark}`,
+  },
+};
+
 export const themeConfig = {
   button: {
     base: 'items-center justify-center',
     variants: {
       primary: {
-        light: 'bg-primary active:bg-primary-dark',
-        dark: 'bg-primary-light active:bg-primary',
+        light: `${themeTokens.light.btnPrimaryBg} ${themeTokens.light.btnPrimaryBgActive}`,
+        dark: `${themeTokens.dark.btnPrimaryBg} ${themeTokens.dark.btnPrimaryBgActive}`,
       },
       secondary: {
-        light: 'bg-secondary active:bg-secondary-dark',
-        dark: 'bg-secondary-light active:bg-secondary',
+        light: `${themeTokens.light.btnSecondaryBg} ${themeTokens.light.btnSecondaryBgActive}`,
+        dark: `${themeTokens.dark.btnSecondaryBg} ${themeTokens.dark.btnSecondaryBgActive}`,
       },
       outline: {
-        light: 'bg-transparent border-2 border-primary',
-        dark: 'bg-transparent border-2 border-primary-light',
+        light: `bg-transparent ${themeTokens.light.btnOutlineBorder}`,
+        dark: `bg-transparent ${themeTokens.dark.btnOutlineBorder}`,
       },
     },
     text: {
       primary: {
-        light: 'text-white',
-        dark: 'text-white',
+        light: themeTokens.light.btnPrimaryText,
+        dark: themeTokens.dark.btnPrimaryText,
       },
       secondary: {
-        light: 'text-white',
-        dark: 'text-white',
+        light: themeTokens.light.btnSecondaryText,
+        dark: themeTokens.dark.btnSecondaryText,
       },
       outline: {
-        light: 'text-primary',
-        dark: 'text-primary-light',
+        light: themeTokens.light.btnOutlineText,
+        dark: themeTokens.dark.btnOutlineText,
       },
     },
     sizes: {
@@ -47,14 +88,14 @@ export const themeConfig = {
       caption: 'text-sm',
     },
     colors: {
-      light: 'text-text-light',
-      dark: 'text-text-dark',
+      light: themeTokens.light.text,
+      dark: themeTokens.dark.text,
     },
   },
   view: {
     background: {
-      light: 'bg-background-light',
-      dark: 'bg-background-dark',
+      light: themeTokens.light.viewBg,
+      dark: themeTokens.dark.viewBg,
     },
   },
 };

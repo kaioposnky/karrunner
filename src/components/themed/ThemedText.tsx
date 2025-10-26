@@ -1,16 +1,10 @@
 import React, { FC } from 'react';
 import {Text, TextProps } from 'react-native';
 import {useTheme} from '@/hooks/useTheme';
+import { themeConfig } from '@/config/theme.config';
 
 interface IThemeTextProps extends TextProps{
   variant?: 'default' | 'title' | 'subtitle' | 'caption',
-}
-
-const variantStyles = {
-  default: 'text-base',
-  title: 'text-2xl font-bold',
-  subtitle: 'text-md',
-  caption: 'text-sm'
 }
 
 export const ThemedText: FC<IThemeTextProps> = ({
@@ -18,12 +12,13 @@ export const ThemedText: FC<IThemeTextProps> = ({
                                                 }) => {
   const {theme} = useTheme();
 
-  variant ??= 'default';
-  const textColor = theme === "dark"? "text-text-dark" : "text-text-light";
+  const textConfig = themeConfig.text;
+  const textStyle = variant ? textConfig.variants[variant] : '';
+  const textColor = textConfig.colors[theme];
 
   return (
     <Text
-      className={`${variantStyles[variant]} ${textColor} ${className}`}
+      className={`${className} ${textColor} ${textStyle}`}
       {...props}
       >
         {children}
