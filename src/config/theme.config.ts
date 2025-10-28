@@ -30,9 +30,18 @@ export const themeConfig = {
       },
     },
     sizes: {
-      small: 'px-4 py-2',
-      medium: 'px-6 py-3',
-      large: 'px-8 py-4',
+      small: 'px-5 py-3',
+      medium: 'px-7 py-4',
+      large: 'px-9 py-5',
+      xl: 'px-12 py-6',
+      '2xl': 'px-16 py-7',
+    },
+    fontSizes: {
+      small: 'text-xl',
+      medium: 'text-xl',
+      large: 'text-2xl',
+      xl: 'text-3xl',
+      '2xl': 'text-4xl',
     },
     borders: {
       round: 'rounded-lg',
@@ -55,6 +64,16 @@ export const themeConfig = {
     background: {
       light: 'bg-background-light',
       dark: 'bg-background-dark',
+    },
+  },
+  input: {
+    style: {
+      light: 'bg-gray-200 text-black border border-gray-300 rounded-lg p-3',
+      dark: 'bg-gray-700 text-white border border-gray-600 rounded-lg p-3',
+    },
+    placeholder: {
+      light: '#9CA3AF',
+      dark: '#6B7280',
     },
   },
 };

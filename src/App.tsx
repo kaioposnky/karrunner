@@ -46,7 +46,6 @@ export default function App() {
             />
           </Stack.Navigator>
         </NavigationContainer>
-        <ThemedText>test</ThemedText>
       </Providers>
       <Toast config={toastConfig} />
     </>

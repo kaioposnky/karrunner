@@ -3,9 +3,8 @@ import { Text, TouchableOpacity, TouchableOpacityProps } from 'react-native';
 import { useTheme } from '@/hooks/useTheme';
 import { themeConfig } from '@/config/theme.config';
 
-
 interface IThemeButtonProps extends TouchableOpacityProps {
-  size?: 'small' | 'medium' | 'large';
+  size?: 'small' | 'medium' | 'large' | 'xl' | '2xl';
   variant?: 'primary' | 'secondary' | 'outline';
   border?: 'roundy' | 'round';
   className?: string;
@@ -23,18 +22,16 @@ export const ThemedButton: FC<IThemeButtonProps> = ({
   const { theme } = useTheme();
   const btnConfig = themeConfig.button;
   const buttonStyle = btnConfig.variants[variant][theme];
-  const textStyle = btnConfig.text[variant];
+  const textStyle = btnConfig.text[variant][theme];
   const sizeStyle = btnConfig.sizes[size];
   const borderStyle = btnConfig.borders[border];
+  const fontSizeStyle = (btnConfig as any).fontSizes[size];
 
   return (
     <TouchableOpacity
       className={`${btnConfig.base} ${buttonStyle} ${sizeStyle} ${borderStyle} ${className}`}
-      {...props}
-    >
-      <Text className={`text-center font-semibold ${textStyle}`}>
-        {title}
-      </Text>
+      {...props}>
+      <Text className={`text-center font-semibold ${textStyle} ${fontSizeStyle}`}>{title}</Text>
     </TouchableOpacity>
   );
 };
