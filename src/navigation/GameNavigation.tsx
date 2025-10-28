@@ -13,7 +13,7 @@ export const PlayerStatsScreen = "PlayerStatsScreen";
 // TODO: Implementar todos os componentes da navegação do jogo
 export const GameNavigation = () => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator initialRouteName={LeaderboardScreen}>
       <Stack.Screen name={MainScreen} component={ThemedText} />
       <Stack.Screen name={LeaderboardScreen} component={ThemedText} />
       <Stack.Screen name={GameNavigationScreen} component={ThemedText} />

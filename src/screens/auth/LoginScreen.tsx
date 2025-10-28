@@ -6,6 +6,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useTheme } from '@/hooks/useTheme';
 import { login } from '@/service/auth';
 import { AuthNavigationProps } from '@/types/AuthNavigationList';
+import { GameNavigationProps } from '@/types/GameNavigationList';
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
 import Toast from 'react-native-toast-message';
@@ -16,7 +17,8 @@ export const LoginScreen = () => {
   const { login } = useAuth();
   const { theme } = useTheme();
 
-  const navigation = useNavigation<AuthNavigationProps>();
+  const authNavigation = useNavigation<AuthNavigationProps>();
+  const gameNavigation = useNavigation<GameNavigationProps>();
   const formBackgroundColor = theme === 'light' ? 'bg-border-light' : 'bg-border-dark';
 
   const handleLogin = async () => {
@@ -27,6 +29,7 @@ export const LoginScreen = () => {
         text2: 'Login realizado com sucesso!',
         position: 'bottom',
       });
+      gameNavigation.navigate('LeaderboardScreen');
     } catch (error: any) {
       Toast.show({
         type: 'error',
@@ -38,7 +41,7 @@ export const LoginScreen = () => {
   };
 
   const goToRegister = () => {
-    navigation.navigate('RegisterScreen');
+    authNavigation.navigate('RegisterScreen');
   };
 
   return (

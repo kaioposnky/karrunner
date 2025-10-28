@@ -1,5 +1,6 @@
 import { auth } from '@/config/firebase.config';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, User } from 'firebase/auth';
+import { createPlayerScore } from './score';
 
 export const login = async (email: string, password: string): Promise<User> => {
   try {
@@ -28,7 +29,9 @@ export const login = async (email: string, password: string): Promise<User> => {
 export const register = async (email: string, password: string): Promise<User> => {
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-
+    const user = userCredential.user;
+    await createPlayerScore(user.uid, user.displayName ?? "", user.email ?? "");
+    
     return userCredential.user;
   } catch (error: any) {
     let errorMessage = 'Ocorreu um erro inesperado ao tentar se registrar.';
