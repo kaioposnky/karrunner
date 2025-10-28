@@ -11,7 +11,6 @@ import { RootNavigationList } from './types/RootNavigationList';
 import { NavigationContainer } from '@react-navigation/native';
 import { AuthNavigation } from './navigation/AuthNavigation';
 import { GameNavigation } from './navigation/GameNavigation';
-import { ThemedText } from './components/themed/ThemedText';
 
 const Stack = createStackNavigator<RootNavigationList>();
 
