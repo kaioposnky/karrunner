@@ -2,6 +2,7 @@ import { ThemedButton } from '@/components/themed/ThemedButton';
 import { ThemedInput } from '@/components/themed/ThemedInput';
 import { ThemedText } from '@/components/themed/ThemedText';
 import { ThemedView } from '@/components/themed/ThemedView';
+import { useAuth } from '@/hooks/useAuth';
 import { useTheme } from '@/hooks/useTheme';
 import { login } from '@/service/auth';
 import { AuthNavigationProps } from '@/types/AuthNavigationList';
@@ -12,6 +13,7 @@ import Toast from 'react-native-toast-message';
 export const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { login } = useAuth();
   const { theme } = useTheme();
 
   const navigation = useNavigation<AuthNavigationProps>();
@@ -22,14 +24,12 @@ export const LoginScreen = () => {
       await login(email, password);
       Toast.show({
         type: 'success',
-        text1: 'Sucesso!',
         text2: 'Login realizado com sucesso!',
         position: 'bottom',
       });
     } catch (error: any) {
       Toast.show({
         type: 'error',
-        text1: 'Erro!',
         text2: error.message,
         position: 'bottom',
       });
@@ -67,8 +67,8 @@ export const LoginScreen = () => {
         />
       </ThemedView>
       <ThemedView className={'w-70 mt-6 flex flex-row justify-center gap-x-8'}>
-        <ThemedButton title="Entrar" className="w-36" onPress={handleLogin} />
-        <ThemedButton title="Registrar" className="w-36" onPress={goToRegister} />
+        <ThemedButton title="Entrar" className="" onPress={handleLogin} />
+        <ThemedButton title="Registrar" className="" onPress={goToRegister} />
       </ThemedView>
     </ThemedView>
   );

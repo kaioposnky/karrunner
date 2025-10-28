@@ -4,8 +4,8 @@ import { RegisterScreen } from '@/screens/auth/RegisterScreen';
 
 const Stack = createStackNavigator();
 
-export const LoginStackScreen = "Login";
-export const RegisterStackScreen = "Register";
+export const LoginStackScreen = "LoginScreen";
+export const RegisterStackScreen = "RegisterScreen";
 
 export const AuthNavigation = () => {
   return (

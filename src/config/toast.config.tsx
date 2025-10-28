@@ -8,8 +8,11 @@ export const toastConfig = {
       style={{ borderLeftColor: 'pink' }}
       contentContainerStyle={{ paddingHorizontal: 15 }}
       text1Style={{
-        fontSize: 15,
+        fontSize: 25,
         fontWeight: '400'
+      }}
+      text2Style={{
+        fontSize: 20,
       }}
     />
   ),
@@ -18,10 +21,10 @@ export const toastConfig = {
       text1='Erro!'
       {...props}
       text1Style={{
-        fontSize: 17
+        fontSize: 25
       }}
       text2Style={{
-        fontSize: 15
+        fontSize: 20
       }}
     />
   ),
