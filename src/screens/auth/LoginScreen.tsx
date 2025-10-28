@@ -10,7 +10,7 @@ import { useState } from 'react';
 import Toast from 'react-native-toast-message';
 
 export const LoginScreen = () => {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { theme } = useTheme();
 
@@ -19,13 +19,20 @@ export const LoginScreen = () => {
 
   const handleLogin = async () => {
     try {
-      await login(username, password);
+      await login(email, password);
       Toast.show({
         type: 'success',
         text1: 'Sucesso!',
         text2: 'Login realizado com sucesso!',
+        position: 'bottom',
       });
     } catch (error: any) {
+      Toast.show({
+        type: 'error',
+        text1: 'Erro!',
+        text2: error.message,
+        position: 'bottom',
+      });
       throw new Error(error.message);
     }
   };
@@ -41,12 +48,14 @@ export const LoginScreen = () => {
           Login
         </ThemedText>
 
-        <ThemedText className="mb-2">Usuário</ThemedText>
+        <ThemedText className="mb-2">E-mail</ThemedText>
         <ThemedInput
           className="mb-4"
-          value={username}
-          onChangeText={setUsername}
-          placeholder="Digite seu usuário"
+          value={email}
+          onChangeText={setEmail}
+          placeholder="Digite seu e-mail"
+          keyboardType="email-address"
+          autoCapitalize="none"
         />
 
         <ThemedText className="mb-2">Senha</ThemedText>

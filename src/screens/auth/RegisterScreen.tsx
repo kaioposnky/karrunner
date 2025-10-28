@@ -12,7 +12,7 @@ export const RegisterScreen = () => {
     >
       {/*Username*/}
       <ThemedInput
-        onChange={(text) => setUsername(text)}
+        onChangeText={(text) => setUsername(text)}
       >
         Username
       </ThemedInput>

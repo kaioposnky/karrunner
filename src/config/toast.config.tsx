@@ -3,6 +3,7 @@ import { BaseToast, ErrorToast, ToastProps } from 'react-native-toast-message';
 export const toastConfig = {
   success: (props : ToastProps) => (
     <BaseToast
+      text1='Sucesso!'
       {...props}
       style={{ borderLeftColor: 'pink' }}
       contentContainerStyle={{ paddingHorizontal: 15 }}
@@ -14,6 +15,7 @@ export const toastConfig = {
   ),
   error: (props: ToastProps) => (
     <ErrorToast
+      text1='Erro!'
       {...props}
       text1Style={{
         fontSize: 17
