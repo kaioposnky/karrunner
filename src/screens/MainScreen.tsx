@@ -17,10 +17,6 @@ export const MainScreen = () => {
       center="both"
     >
       <Header/>
-      <Stack.Navigator>
-        <Stack.Screen name={AuthStackNavigation} component={AuthNavigation}></Stack.Screen>
-        <Stack.Screen name={GameStackNavigation} component={GameNavigation}></Stack.Screen>
-      </Stack.Navigator>
     </ThemedView>
   );
 };
