@@ -1,6 +1,7 @@
 import { ThemedText } from '@/components/themed/ThemedText';
 import { createStackNavigator } from '@react-navigation/stack';
 import { LeaderBoardScreen } from '@/screens/game/LeaderBoardScreen';
+import { CarRouletteScreen } from '@/screens/game/CarSpinScreen';
 
 const Stack = createStackNavigator();
 
@@ -14,7 +15,7 @@ export const PlayerStatsStackScreen = 'PlayerStatsScreen';
 // TODO: Implementar todos os componentes da navegação do jogo
 export const GameNavigation = () => {
   return (
-    <Stack.Navigator initialRouteName={LeaderboardStackScreen}>
+    <Stack.Navigator initialRouteName={CarRouletteStackScreen}>
       <Stack.Screen
         name={MainStackScreen}
         component={ThemedText}
@@ -37,7 +38,7 @@ export const GameNavigation = () => {
       />
       <Stack.Screen
         name={CarRouletteStackScreen}
-        component={ThemedText}
+        component={CarRouletteScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen

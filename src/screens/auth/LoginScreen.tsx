@@ -4,9 +4,7 @@ import { ThemedText } from '@/components/themed/ThemedText';
 import { ThemedView } from '@/components/themed/ThemedView';
 import { useAuth } from '@/hooks/useAuth';
 import { useTheme } from '@/hooks/useTheme';
-import { AuthNavigationProps } from '@/types/AuthNavigationList';
-import { GameNavigationProps } from '@/types/GameNavigationList';
-import { StackActions, useNavigation, CommonActions } from '@react-navigation/native';
+import { useNavigation, CommonActions } from '@react-navigation/native';
 import { useState } from 'react';
 import Toast from 'react-native-toast-message';
 

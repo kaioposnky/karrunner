@@ -1,5 +1,4 @@
 import '@/global.css';
-import { StatusBar } from 'expo-status-bar';
 import { ThemeProvider } from '@/context/ThemeContext';
 import { AuthProvider } from './context/AuthContext';
 import { toastConfig } from './config/toast.config';
