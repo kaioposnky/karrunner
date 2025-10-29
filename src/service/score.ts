@@ -57,6 +57,7 @@ export async function getAllScores(limit?: number): Promise<UserScore[]> {
       return scoresArray.reverse();
     })
     .catch((error: any) => {
+      console.error(error);
       let errorMessage = 'Ocorreu um erro ao obter as pontuações!';
       if (error.message.includes('PERMISSION_DENIED')) {
         errorMessage = 'Você não tem permissão para acessar as pontuações.';
