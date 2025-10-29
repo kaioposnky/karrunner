@@ -11,6 +11,7 @@ import Toast from "react-native-toast-message";
 
 export const RegisterScreen = () => {
   const [email, setEmail] = useState('');
+  const [displayName, setDisplayName] = useState('');
   const [password, setPassword] = useState('');
   const { theme } = useTheme();
 
@@ -19,10 +20,10 @@ export const RegisterScreen = () => {
 
   const handleRegister = async () => {
     try {
-      await register(email, password);
+      await register({ email, displayName, password });
       Toast.show({
         type: 'success',
-        text2: 'Login realizado com sucesso!',
+        text2: 'Registro realizado com sucesso!',
         position: 'bottom',
       });
     } catch (error: any) {
@@ -46,6 +47,15 @@ export const RegisterScreen = () => {
           Registro
         </ThemedText>
 
+        <ThemedText className="mb-2">Nome de usuário</ThemedText>
+        <ThemedInput
+          className="mb-4"
+          value={displayName}
+          onChangeText={setDisplayName}
+          placeholder="Digite seu nome de usuário"
+          autoCapitalize="none"
+        />
+        
         <ThemedText className="mb-2">E-mail</ThemedText>
         <ThemedInput
           className="mb-4"
@@ -65,7 +75,7 @@ export const RegisterScreen = () => {
         />
       </ThemedView>
       <ThemedView className={'w-70 mt-6 flex flex-row justify-center gap-x-8'}>
-        <ThemedButton title="Cadastrar" className="" onPress={handleRegister} />
+        <ThemedButton title="Registrar" className="" onPress={handleRegister} />
         <ThemedButton title="Logar" className="" onPress={goToLogin} />
       </ThemedView>
     </ThemedView>

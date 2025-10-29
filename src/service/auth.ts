@@ -1,6 +1,7 @@
 import { auth } from '@/config/firebase.config';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, User } from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, User } from 'firebase/auth';
 import { createPlayerScore } from './score';
+import { UnregisteredUser } from '@/types/UnregisteredUser';
 
 export const login = async (email: string, password: string): Promise<User> => {
   try {
@@ -26,10 +27,17 @@ export const login = async (email: string, password: string): Promise<User> => {
   }
 };
 
-export const register = async (email: string, password: string): Promise<User> => {
+export const register = async (unregisteredUser : UnregisteredUser): Promise<User> => {
   try {
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    // Cria o Usuário
+    const userCredential = await createUserWithEmailAndPassword(auth, unregisteredUser.email, unregisteredUser.password);
     const user = userCredential.user;
+    
+    // Atualiza o nome do usuário
+    const displayName = unregisteredUser.displayName;
+    await updateProfile(user, {displayName})
+    
+    // Cria o score do usuário
     await createPlayerScore(user.uid, user.displayName ?? "", user.email ?? "");
     
     return userCredential.user;
