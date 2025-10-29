@@ -10,8 +10,8 @@ export const RegisterStackScreen = "RegisterScreen";
 export const AuthNavigation = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen name={LoginStackScreen} component={LoginScreen} />
-      <Stack.Screen name={RegisterStackScreen} component={RegisterScreen} />
+      <Stack.Screen name={LoginStackScreen} component={LoginScreen} options={{ headerShown: false }} />
+      <Stack.Screen name={RegisterStackScreen} component={RegisterScreen} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 };
