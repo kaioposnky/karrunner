@@ -6,14 +6,15 @@ import { useTheme } from '@/hooks/useTheme';
 interface IThemeViewCenterHProps extends ViewProps{
   center?: "horizontal" | "vertical" | "both";
   className?: string;
+  disableBg?: boolean;
 }
 
 export const ThemedView: FC<IThemeViewCenterHProps> = ({
-  center, children, className='', ...props
+  center, children, className='', disableBg=false, ...props
                                                        }) => {
   const {theme} = useTheme();
 
-  const viewColor = themeConfig.view.background[theme];
+  const viewColor = disableBg ? '' : themeConfig.view.background[theme];
   let centerClasses = '';
   if(center){
     if(center === "horizontal"){
