@@ -43,7 +43,7 @@ export const LeaderBoardScreen = () => {
 
       <ThemedView className="w-full max-w-sm overflow-hidden rounded-lg border border-gray-200 shadow-md dark:border-gray-700">
         {/* Nomes das colunas */}
-        <ThemedView className="flex-row justify-between border-b border-gray-200 bg-gray-50 p-3 dark:border-gray-700 dark:bg-gray-800">
+        <ThemedView className="flex-row justify-between border-b border-gray-200 p-3 dark:border-gray-700 dark:bg-gray-800">
           <ThemedText variant="subtitle" className="w-2/3 font-bold">
             Usuário
           </ThemedText>
