@@ -1,10 +1,14 @@
 import { ThemedText } from '@/components/themed/ThemedText';
 import { ThemedView } from '@/components/themed/ThemedView';
 import { Car } from '@/types/Car';
+import React, { useState } from 'react';
+import { ThemedButton } from '@/components/themed/ThemedButton';
+import { CarSpinReel } from '@/components/reel/CarSpinReel';
+import { useTheme } from '@/hooks/useTheme';
 import { useNavigation } from '@react-navigation/native';
-import { useState } from 'react';
-import { Button, View } from 'react-native';
-import { Reel } from '@/components/reel/CarReel'
+import { GameNavigationProps } from '@/types/GameNavigationList';
+import { Modal } from 'react-native';
+
 const testCars: Car[] = [
   { id: '1', name: 'Honda Civic', rarity: 'common' },
   { id: '2', name: 'Toyota Corolla', rarity: 'common' },
@@ -16,81 +20,100 @@ const testCars: Car[] = [
   { id: '8', name: 'McLaren P1', rarity: 'legendary' },
 ];
 
-export const CarRouletteScreen = () => {
-  const navigation = useNavigation();
+export const CarSpinScreen = () => {
   const [shouldSpin, setShouldSpin] = useState(false);
   const [selectedCar, setSelectedCar] = useState<Car | null>(null);
   const [isSpinning, setIsSpinning] = useState(false);
 
+  const navigation = useNavigation<GameNavigationProps>();
+  const { theme } = useTheme();
+
   const handleSpinStart = () => {
-    console.log('🎰 Roleta começou a girar!');
     setIsSpinning(true);
-    setSelectedCar(null); // Limpar seleção anterior
+    setSelectedCar(null);
   };
 
   const handleSpinComplete = (car: Car) => {
-    console.log('🏆 Carro selecionado:', car.name, `(${car.rarity})`);
     setSelectedCar(car);
-    setShouldSpin(false); // Reset
+    setShouldSpin(false);
     setIsSpinning(false);
+  };
+
+  const handleRedeem = () => {
+    setSelectedCar(null);
   };
 
   const startSpin = () => {
     if (!shouldSpin) {
+      setIsSpinning(true);
       setShouldSpin(true);
     }
   };
 
+  const goBack = () => {
+    navigation.goBack();
+  };
+
+  const themeBg = theme === 'dark' ? 'bg-secondary-dark' : 'bg-secondary-light';
+  const borderBg = theme === 'dark' ? 'border-secondary-dark' : 'border-secondary-light';
+  const REEL_CONTAINER_HEIGHT = 20 * 24;
+  const ITEM_SIZE = 120;
+
   return (
-    <ThemedView style={{ flex: 1, padding: 20 }}>
-      <ThemedText style={{ fontSize: 24, textAlign: 'center', marginBottom: 20 }}>
-        🎰 Car Roulette
-      </ThemedText>
+    <ThemedView center="horizontal" className="gap-6 p-4">
+      <ThemedText className="mt-20 text-5xl font-bold">🎰 Roletar Carros</ThemedText>
 
       {/* Área da roleta */}
-      <View style={{ height: 150, marginVertical: 20 }}>
-        <Reel
+      <ThemedView
+        className={`items-center overflow-hidden rounded-lg p-2 ${themeBg}`}
+        style={{ height: REEL_CONTAINER_HEIGHT }}>
+        <CarSpinReel
           cars={testCars}
           shouldSpin={shouldSpin}
           onSpin={handleSpinStart}
           onSpinComplete={handleSpinComplete}
+          itemSize={ITEM_SIZE}
+          containerHeight={REEL_CONTAINER_HEIGHT}
+          offset={0}
         />
-      </View>
+      </ThemedView>
 
       {/* Botão de girar */}
-      <View style={{ marginVertical: 20 }}>
-        <Button
-          title={isSpinning ? 'Girando...' : '🎲 Girar Roleta!'}
-          onPress={startSpin}
-          disabled={isSpinning}
-        />
-      </View>
+      <ThemedButton
+        title={isSpinning ? 'Girando...' : 'Roletar carro! $1000'}
+        className={'text-bold bg-yellow-600'}
+        onPress={startSpin}
+        disabled={isSpinning || shouldSpin}
+        size="large"
+      />
+
+      {/* Botão de voltar */}
+      <ThemedButton
+        title={isSpinning ? 'Girando...' : 'Voltar'}
+        onPress={goBack}
+        disabled={isSpinning || shouldSpin}
+        size="large"
+      />
 
       {/* Resultado */}
       {selectedCar && (
-        <ThemedView
-          style={{
-            padding: 20,
-            borderRadius: 10,
-            borderWidth: 2,
-            borderColor: '#FFD700',
-            marginTop: 20,
-            alignItems: 'center',
-          }}>
-          <ThemedText style={{ fontSize: 18, fontWeight: 'bold' }}>🏆 Você ganhou:</ThemedText>
-          <ThemedText style={{ fontSize: 16, marginTop: 10 }}>{selectedCar.name}</ThemedText>
-          <ThemedText style={{ fontSize: 14, marginTop: 5, opacity: 0.8 }}>
-            Raridade: {selectedCar.rarity}
-          </ThemedText>
-        </ThemedView>
+        <Modal
+          transparent={true}
+          animationType="fade"
+          visible={selectedCar !== null}
+          onRequestClose={handleRedeem}>
+          <ThemedView className={`flex-1 items-center justify-center bg-black/50 `}>
+            <ThemedView className={`w-4/5 max-w-sm items-center gap-4 rounded-lg p-6 ${borderBg}`}>
+              <ThemedText className="text-2xl font-bold">🏆 Você ganhou:</ThemedText>
+              <ThemedText className="text-xl">{selectedCar.name}</ThemedText>
+              <ThemedText className="text-base opacity-80">
+                Raridade: {selectedCar.rarity}
+              </ThemedText>
+              <ThemedButton title="Resgatar" onPress={handleRedeem} size="large" />
+            </ThemedView>
+          </ThemedView>
+        </Modal>
       )}
-
-      {/* Info de debug */}
-      <View style={{ marginTop: 20, opacity: 0.6 }}>
-        <ThemedText style={{ fontSize: 12, textAlign: 'center' }}>
-          Debug: shouldSpin={shouldSpin.toString()}, isSpinning={isSpinning.toString()}
-        </ThemedText>
-      </View>
     </ThemedView>
   );
 };
