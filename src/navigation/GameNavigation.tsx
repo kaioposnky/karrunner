@@ -1,7 +1,7 @@
 import { ThemedText } from '@/components/themed/ThemedText';
 import { createStackNavigator } from '@react-navigation/stack';
 import { LeaderBoardScreen } from '@/screens/game/LeaderBoardScreen';
-import { CarRouletteScreen } from '@/screens/game/CarSpinScreen';
+import { CarSpinScreen } from '@/screens/game/CarSpinScreen';
 
 const Stack = createStackNavigator();
 
@@ -38,7 +38,7 @@ export const GameNavigation = () => {
       />
       <Stack.Screen
         name={CarRouletteStackScreen}
-        component={CarRouletteScreen}
+        component={CarSpinScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen
