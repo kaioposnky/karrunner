@@ -74,7 +74,8 @@ export async function getUserCars(userId: string): Promise<Car[]> {
   const carPromises = carIds.map(id => getCarById(id));
   const carResults = await Promise.all(carPromises);
 
-  return carResults;
+  // Remover carros nulos caso tenha
+  return carResults.filter((car): car is Car => car !== null);
 }
 
 export async function addUserCar(userId: string, carId: string): Promise<void> {
@@ -92,21 +93,13 @@ export async function addUserCar(userId: string, carId: string): Promise<void> {
 export async function getAllCars() : Promise<Car[]>{
   const dbRef = ref(getDatabase());
 
-  const carsRef = child(dbRef, "cars");
-  const cars = await get(carsRef)
-    .then((snapshot) => {
-      if (snapshot.exists()) {
-        return snapshot.val();
-      } else {
-        return [];
-      }
-    })
-    .catch((error) => {
-      console.error("Erro ao buscar carro:", error);
-      return [];
-    });
+  // Transforma o objeto do firebase em uma lista de carros
+  if (snapshot.exists()) {
+    const carsObject = snapshot.val();
+    return Object.values(carsObject);
+  }
 
-  return cars;
+  return [];
 }
 
 export async function addUserInitialCar(userId: string){
