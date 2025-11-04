@@ -9,6 +9,7 @@ import { RootNavigationList } from '@/types/RootNavigationList';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useCallback, useEffect, useState } from 'react';
+import Toast from 'react-native-toast-message';
 
 export const CarSelection = () => {
   const [allCars, setAllCars] = useState<Car[]>([]);
@@ -39,11 +40,20 @@ export const CarSelection = () => {
       goToLogin();
       return;
     }
-
-    if(user !== null){
-      setSelectedCar(user.selectedCar);
-    }
   }, [goToLogin, isLoading, navigation, user]);
+
+  useEffect(() => {
+    if(!isLoading){
+      if(user !== null){
+        Toast.show({
+          type: 'success',
+          text1: 'Carregando...',
+          text2: 'Carro atual: ' + user.selectedCar?.name,
+        });
+        setSelectedCar(user.selectedCar);
+      }
+    }
+  }, [isLoading, user]);
 
   const handleCarSelect = (car: Car) => {
     if (!user) return;
@@ -51,7 +61,6 @@ export const CarSelection = () => {
     setSelectedCar(car);
     setUserSelectedCar(user.uid, car.id);
   };
-
 
   if (isLoading || !user) {
     return (
@@ -70,6 +79,7 @@ export const CarSelection = () => {
   return (
     <ThemedView
       center='horizontal'
+      className='flex-1'
     >
       <ThemedText variant='title' className={"text-4xl mt-20 mb-12"}>
         Selecione seu carro
@@ -79,8 +89,7 @@ export const CarSelection = () => {
         userCars={user?.cars ?? []}
         selectedCar={selectedCar}
         onCarSelect={handleCarSelect}
-      >
-      </CarSelectList>
+      />
       <ThemedButton
         title={'Voltar'}
         onPress={goToLogin}
