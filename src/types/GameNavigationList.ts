@@ -1,14 +1,10 @@
 import { StackNavigationProp } from "@react-navigation/stack";
 
 export type GameNavigationList = {
-  MainScreen: undefined;
   LeaderboardScreen: undefined;
-  GameNavigationScreen: undefined;
-  ChangeCarScreen: undefined;
-  CarRouletteScreen: undefined;
+  GameMainMenu: undefined;
+  CarSelectionScreen: undefined;
+  CarSpinScreen: undefined;
   PlayerStatsScreen: undefined;
-  GameOverScreen: undefined;
 }
 export type GameNavigationProps = StackNavigationProp<GameNavigationList>;
-
-

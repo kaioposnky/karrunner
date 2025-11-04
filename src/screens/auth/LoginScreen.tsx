@@ -4,7 +4,6 @@ import { ThemedText } from '@/components/themed/ThemedText';
 import { ThemedView } from '@/components/themed/ThemedView';
 import { useAuth } from '@/hooks/useAuth';
 import { useTheme } from '@/hooks/useTheme';
-import { AuthNavigation } from '@/navigation/AuthNavigation';
 import { AuthNavigationList } from '@/types/AuthNavigationList';
 import { RootNavigationList } from '@/types/RootNavigationList';
 import { useNavigation, CommonActions } from '@react-navigation/native';
