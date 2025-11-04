@@ -78,7 +78,22 @@ export const CarSpinScreen = () => {
             offset={0}
           />
         )}
+        {/*Seta no meio da roleta*/}
+        <ThemedView
+          disableBg
+          className='absolute top-0 bottom-0 left-0 justify-center'
+        >
+          <ThemedText className='text-3xl text-yellow-400'>▶</ThemedText>
+        </ThemedView>
+        {/*Seta no meio da roleta*/}
+        <ThemedView
+          disableBg
+          className='absolute top-0 bottom-0 right-0 justify-center'
+        >
+          <ThemedText className='text-3xl text-yellow-400'>◀</ThemedText>
+        </ThemedView>
       </ThemedView>
+
 
       {/* Botão de girar */}
       <ThemedButton

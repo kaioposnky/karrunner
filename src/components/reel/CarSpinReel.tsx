@@ -1,4 +1,4 @@
-import { Animated, Dimensions, Easing } from 'react-native';
+import { Animated, Image, Easing } from 'react-native';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Car } from '@/types/Car';
 import { Rarity, RarityProbability } from '@/types/Rarity';
@@ -34,7 +34,6 @@ export const CarSpinReel = ({
 
   // States
   const [isSpinning, setIsSpinning] = useState(false);
-  const [selectedCar, setSelectedCar] = useState<ReelCar | null>(null);
   const [selectedCarIndex, setSelectedCarIndex] = useState<number | null>(null);
   const [cars, setCars] = useState<ReelCar[]>([]);
   const [carsExtended, setCarsExtended] = useState<ReelCar[]>([]);
@@ -47,7 +46,6 @@ export const CarSpinReel = ({
     if (isSpinning) return;
     if (cars.length === 0 || carsExtended.length === 0) return;
     setIsSpinning(true);
-    setSelectedCar(null);
     onSpin();
 
     const currentPosition = animationPos.current; // Posição atual na animação (provavelmente so vai considerar a posicao final anterior)
@@ -79,7 +77,6 @@ export const CarSpinReel = ({
 
       setTimeout(() => {
         setIsSpinning(false);
-        setSelectedCar(carResult);
         setSelectedCarIndex(finalTargetedPosition);
         onSpinComplete(carResult);
       }, 100);
@@ -100,26 +97,23 @@ export const CarSpinReel = ({
 
   const renderCarItem = ({ car, index }: { car: ReelCar; index: number }) => (
     <ThemedView
+      className={`items-center justify-center rounded-lg border-2 p-2 border-[${selectedCarIndex === index ? '#FFD700' : '#ccc'}]`}
       style={{
         width: itemSize,
         height: itemSize,
         margin: 10,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 8,
-        borderWidth: 2,
-        borderColor: selectedCarIndex === index ? '#FFD700' : '#ccc',
       }}>
+      <Image
+        source={{ uri: car.images.select }}
+        style={{ flex: 1, width: '100%' }}
+        resizeMode="contain"
+      />
       <ThemedText
-        style={{
-          fontSize: 12,
-          fontWeight: 'bold',
-          textAlign: 'center',
-          color: getRarityColor(car.rarity),
-        }}>
+        className={`text-xs font-bold text-center mt-1 text-[${getRarityColor(car.rarity)}]`}
+        numberOfLines={1}
+      >
         {car.name}
       </ThemedText>
-      <ThemedText style={{ fontSize: 10, marginTop: 4 }}>{car.rarity}</ThemedText>
     </ThemedView>
   );
 
