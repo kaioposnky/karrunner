@@ -4,7 +4,11 @@ import { ThemedText } from '@/components/themed/ThemedText';
 import { ThemedView } from '@/components/themed/ThemedView';
 import { useAuth } from '@/hooks/useAuth';
 import { useTheme } from '@/hooks/useTheme';
+import { AuthNavigation } from '@/navigation/AuthNavigation';
+import { AuthNavigationList } from '@/types/AuthNavigationList';
+import { RootNavigationList } from '@/types/RootNavigationList';
 import { useNavigation, CommonActions } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { useState } from 'react';
 import Toast from 'react-native-toast-message';
 
@@ -14,7 +18,8 @@ export const LoginScreen = () => {
   const { login } = useAuth();
   const { theme } = useTheme();
 
-  const navigation = useNavigation<any>();
+  const navigation = useNavigation<StackNavigationProp<RootNavigationList>>();
+  const authNavigation = useNavigation<StackNavigationProp<AuthNavigationList>>();
   const formBackgroundColor = theme === 'light' ? 'bg-border-light' : 'bg-border-dark';
 
   const handleLogin = async () => {
@@ -42,7 +47,7 @@ export const LoginScreen = () => {
   };
 
   const goToRegister = () => {
-    navigation.navigate('RegisterScreen');
+    authNavigation.push("RegisterScreen");
   };
 
   return (
