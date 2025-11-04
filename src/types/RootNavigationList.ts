@@ -1,5 +1,8 @@
+import { AuthNavigationProps } from "./AuthNavigationList";
+import { GameNavigationProps } from "./GameNavigationList";
+
 export type RootNavigationList = {
-  AuthNavigation: undefined;
-  GameNavigation: undefined;
+  AuthNavigation: AuthNavigationProps;
+  GameNavigation: GameNavigationProps;
   MainScreen: undefined;
 };
