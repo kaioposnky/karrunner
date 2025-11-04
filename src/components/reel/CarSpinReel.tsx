@@ -97,11 +97,12 @@ export const CarSpinReel = ({
 
   const renderCarItem = ({ car, index }: { car: ReelCar; index: number }) => (
     <ThemedView
-      className={`items-center justify-center rounded-lg border-2 p-2 border-[${selectedCarIndex === index ? '#FFD700' : '#ccc'}]`}
+      className={`items-center justify-center rounded-lg border-2 p-2`}
       style={{
         width: itemSize,
         height: itemSize,
         margin: 10,
+        borderColor: selectedCarIndex === index ? '#FFD700' : '#ccc',
       }}>
       <Image
         source={{ uri: car.images.select }}
@@ -109,7 +110,10 @@ export const CarSpinReel = ({
         resizeMode="contain"
       />
       <ThemedText
-        className={`text-xs font-bold text-center mt-1 text-[${getRarityColor(car.rarity)}]`}
+        style={{
+          color: getRarityColor(car.rarity),
+        }}
+        className={`text-xs font-bold text-center mt-1`}
         numberOfLines={1}
       >
         {car.name}
