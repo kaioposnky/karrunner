@@ -1,43 +1,39 @@
 import { ThemedText } from '@/components/themed/ThemedText';
 import { createStackNavigator } from '@react-navigation/stack';
 import { LeaderBoardScreen } from '@/screens/game/LeaderBoardScreen';
+import { CarSelection } from '@/screens/game/CarSelection';
 import { CarSpinScreen } from '@/screens/game/CarSpinScreen';
+import { GameMainMenu } from '@/screens/game/GameMainMenu';
 
 const Stack = createStackNavigator();
 
-export const MainStackScreen = 'MainScreen';
 export const LeaderboardStackScreen = 'LeaderboardScreen';
-export const GameNavigationStackScreen = 'GameNavigationScreen';
-export const ChangeCarStackScreen = 'ChangeCarScreen';
-export const CarRouletteStackScreen = 'CarRouletteScreen';
+export const GameMainMenuStackScreen = 'GameMainMenu';
+export const CarSelectionStackScreen = 'CarSelectionScreen';
+export const CarSpinStackScreen = 'CarSpinScreen';
 export const PlayerStatsStackScreen = 'PlayerStatsScreen';
 
 // TODO: Implementar todos os componentes da navegação do jogo
 export const GameNavigation = () => {
   return (
-    <Stack.Navigator initialRouteName={CarRouletteStackScreen}>
-      <Stack.Screen
-        name={MainStackScreen}
-        component={ThemedText}
-        options={{ headerShown: false }}
-      />
+    <Stack.Navigator initialRouteName={GameMainMenuStackScreen}>
       <Stack.Screen
         name={LeaderboardStackScreen}
         component={LeaderBoardScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name={GameNavigationStackScreen}
-        component={ThemedText}
+        name={GameMainMenuStackScreen}
+        component={GameMainMenu}
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name={ChangeCarStackScreen}
-        component={ThemedText}
+        name={CarSelectionStackScreen}
+        component={CarSelection}
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name={CarRouletteStackScreen}
+        name={CarSpinStackScreen}
         component={CarSpinScreen}
         options={{ headerShown: false }}
       />
