@@ -27,6 +27,12 @@ module.exports = {
           light: '#E5E7EB',
           dark: '#374151',
         },
+        rarity: {
+          common: '#808080',
+          rare: '#0080FF',
+          epic: '#8A2BE2',
+          legendary: '#FFD700',
+        },
       },
     },
   },
