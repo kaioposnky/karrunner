@@ -6,7 +6,7 @@ export interface Car {
   rarity: Rarity;
   unlocked?: boolean | null;
   images: {
-    side: string,
+    select: string,
     run: string
   }
 };

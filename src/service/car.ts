@@ -90,8 +90,9 @@ export async function addUserCar(userId: string, carId: string): Promise<void> {
   }
 }
 
-export async function getAllCars() : Promise<Car[]>{
-  const dbRef = ref(getDatabase());
+export async function getAllCars(): Promise<Car[]> {
+  const dbRef = ref(getDatabase(), "cars");
+  const snapshot = await get(dbRef);
 
   // Transforma o objeto do firebase em uma lista de carros
   if (snapshot.exists()) {
