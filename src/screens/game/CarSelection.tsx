@@ -6,7 +6,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { getAllCars, setUserSelectedCar } from '@/service/car';
 import { Car } from '@/types/Car';
 import { RootNavigationList } from '@/types/RootNavigationList';
-import { CommonActions, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useCallback, useEffect, useState } from 'react';
 
@@ -16,13 +16,8 @@ export const CarSelection = () => {
   const [selectedCar, setSelectedCar] = useState(user?.selectedCar ?? null);
   const navigation = useNavigation<StackNavigationProp<RootNavigationList>>();
 
-  const goToLogin = useCallback(() => {
-    navigation.dispatch(
-      CommonActions.reset({
-        index: 0,
-        routes: [{ name: 'AuthNavigation' }],
-      })
-    );
+  const goBack = useCallback(() => {
+    navigation.goBack();
   }, [navigation]);
 
   useEffect(() => {
@@ -36,14 +31,14 @@ export const CarSelection = () => {
 
   useEffect(() => {
     if(!isLoading && !user){
-      goToLogin();
+      goBack();
       return;
     }
 
     if(user !== null){
       setSelectedCar(user.selectedCar);
     }
-  }, [goToLogin, isLoading, navigation, user]);
+  }, [goBack, isLoading, navigation, user]);
 
   const handleCarSelect = (car: Car) => {
     if (!user) return;
@@ -83,7 +78,7 @@ export const CarSelection = () => {
       </CarSelectList>
       <ThemedButton
         title={'Voltar'}
-        onPress={goToLogin}
+        onPress={goBack}
         variant='primary'
         className='mb-8 mt-2'
       />
