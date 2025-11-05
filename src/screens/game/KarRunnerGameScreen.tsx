@@ -31,6 +31,7 @@ export const KarRunnerGameScreen = () => {
       {/*<ThemedText>KarRunner Game Screen</ThemedText>*/}
       <ThemedView
         center='both'
+        disableBg={true}
         style={{ position: 'absolute', top: 50, left: 0, right: 0, zIndex: 1 }}
       >
         <ThemedText>X: {accelerometerData.x.toFixed(2)}</ThemedText>
