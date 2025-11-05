@@ -1,7 +1,7 @@
 import { get, ref, getDatabase, child, set } from "firebase/database";
 import { Car } from "@/types/Car";
 
-const USER_SELECTED_CAR_PATH = (id: string) => (`users/${id}/selected_car`);
+const USER_SELECTED_CAR_PATH = (id: string) => (`users/${id}/selectedCar`);
 const USER_CARS_PATH = (id: string) => (`users/${id}/cars`);
 const CAR_PATH = (id: string) => (`cars/${id}`);
 

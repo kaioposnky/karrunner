@@ -1,29 +1,29 @@
 import { ThemedText } from '@/components/themed/ThemedText';
 import { ThemedView } from '@/components/themed/ThemedView';
 import { Car } from '@/types/Car';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ThemedButton } from '@/components/themed/ThemedButton';
 import { CarSpinReel } from '@/components/reel/CarSpinReel';
 import { useTheme } from '@/hooks/useTheme';
 import { useNavigation } from '@react-navigation/native';
 import { GameNavigationProps } from '@/types/GameNavigationList';
 import { Modal } from 'react-native';
-
-const testCars: Car[] = [
-  { id: '1', name: 'Honda Civic', rarity: 'common' },
-  { id: '2', name: 'Toyota Corolla', rarity: 'common' },
-  { id: '3', name: 'BMW M3', rarity: 'rare' },
-  { id: '4', name: 'Mercedes AMG', rarity: 'rare' },
-  { id: '5', name: 'Ferrari F40', rarity: 'epic' },
-  { id: '6', name: 'Lamborghini', rarity: 'epic' },
-  { id: '7', name: 'Bugatti Veyron', rarity: 'legendary' },
-  { id: '8', name: 'McLaren P1', rarity: 'legendary' },
-];
+import { getAllCars } from '@/service/car';
 
 export const CarSpinScreen = () => {
+  const [allCars, setAllCars] = useState<Car[]>([]);
   const [shouldSpin, setShouldSpin] = useState(false);
   const [selectedCar, setSelectedCar] = useState<Car | null>(null);
   const [isSpinning, setIsSpinning] = useState(false);
+
+  useEffect(() => {
+    const fetchCars = async () => {
+      const cars = await getAllCars();
+      setAllCars(cars);
+    };
+
+    fetchCars();
+  }, []);
 
   const navigation = useNavigation<GameNavigationProps>();
   const { theme } = useTheme();
@@ -67,16 +67,33 @@ export const CarSpinScreen = () => {
       <ThemedView
         className={`items-center overflow-hidden rounded-lg p-2 ${themeBg}`}
         style={{ height: REEL_CONTAINER_HEIGHT }}>
-        <CarSpinReel
-          cars={testCars}
-          shouldSpin={shouldSpin}
-          onSpin={handleSpinStart}
-          onSpinComplete={handleSpinComplete}
-          itemSize={ITEM_SIZE}
-          containerHeight={REEL_CONTAINER_HEIGHT}
-          offset={0}
-        />
+        {allCars.length > 0 && (
+          <CarSpinReel
+            cars={allCars}
+            shouldSpin={shouldSpin}
+            onSpin={handleSpinStart}
+            onSpinComplete={handleSpinComplete}
+            itemSize={ITEM_SIZE}
+            containerHeight={REEL_CONTAINER_HEIGHT}
+            offset={0}
+          />
+        )}
+        {/*Seta no meio da roleta*/}
+        <ThemedView
+          disableBg
+          className='absolute top-0 bottom-0 left-0 justify-center'
+        >
+          <ThemedText className='text-3xl text-yellow-400'>▶</ThemedText>
+        </ThemedView>
+        {/*Seta no meio da roleta*/}
+        <ThemedView
+          disableBg
+          className='absolute top-0 bottom-0 right-0 justify-center'
+        >
+          <ThemedText className='text-3xl text-yellow-400'>◀</ThemedText>
+        </ThemedView>
       </ThemedView>
+
 
       {/* Botão de girar */}
       <ThemedButton

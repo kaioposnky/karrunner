@@ -8,7 +8,7 @@ interface UserProfileFromDB {
   displayName: string;
   email: string;
   cars?: { [id: string]: boolean };
-  selectedCarId?: string;
+  selectedCar?: string;
 }
 
 export async function getUserProfile(userId: string): Promise<User | null> {
@@ -32,8 +32,8 @@ export async function getUserProfile(userId: string): Promise<User | null> {
 
   // Pega o carro selecionado pelo usuário
   let selectedCar: Car | null = null;
-  if (dbProfile.selectedCarId) {
-    selectedCar = await getCarById(dbProfile.selectedCarId);
+  if (dbProfile.selectedCar) {
+    selectedCar = await getCarById(dbProfile.selectedCar);
   }
 
   const user: User = {

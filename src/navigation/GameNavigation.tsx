@@ -2,33 +2,29 @@ import { ThemedText } from '@/components/themed/ThemedText';
 import { createStackNavigator } from '@react-navigation/stack';
 import { LeaderBoardScreen } from '@/screens/game/LeaderBoardScreen';
 import { CarSelection } from '@/screens/game/CarSelection';
+import { CarSpinScreen } from '@/screens/game/CarSpinScreen';
+import { GameMainMenu } from '@/screens/game/GameMainMenu';
 
 const Stack = createStackNavigator();
 
-export const MainStackScreen = 'MainScreen';
 export const LeaderboardStackScreen = 'LeaderboardScreen';
-export const GameNavigationStackScreen = 'GameNavigationScreen';
-export const CarSelectionStackScreen = 'ChangeCarScreen';
-export const CarRouletteStackScreen = 'CarRouletteScreen';
+export const GameMainMenuStackScreen = 'GameMainMenu';
+export const CarSelectionStackScreen = 'CarSelectionScreen';
+export const CarSpinStackScreen = 'CarSpinScreen';
 export const PlayerStatsStackScreen = 'PlayerStatsScreen';
 
 // TODO: Implementar todos os componentes da navegação do jogo
 export const GameNavigation = () => {
   return (
-    <Stack.Navigator initialRouteName={CarSelectionStackScreen}>
-      <Stack.Screen
-        name={MainStackScreen}
-        component={ThemedText}
-        options={{ headerShown: false }}
-      />
+    <Stack.Navigator initialRouteName={GameMainMenuStackScreen}>
       <Stack.Screen
         name={LeaderboardStackScreen}
         component={LeaderBoardScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name={GameNavigationStackScreen}
-        component={ThemedText}
+        name={GameMainMenuStackScreen}
+        component={GameMainMenu}
         options={{ headerShown: false }}
       />
       <Stack.Screen
@@ -37,8 +33,8 @@ export const GameNavigation = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name={CarRouletteStackScreen}
-        component={ThemedText}
+        name={CarSpinStackScreen}
+        component={CarSpinScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen
