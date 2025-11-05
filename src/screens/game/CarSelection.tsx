@@ -9,7 +9,6 @@ import { RootNavigationList } from '@/types/RootNavigationList';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useCallback, useEffect, useState } from 'react';
-import Toast from 'react-native-toast-message';
 
 export const CarSelection = () => {
   const [allCars, setAllCars] = useState<Car[]>([]);
@@ -44,11 +43,6 @@ export const CarSelection = () => {
   useEffect(() => {
     if(!isLoading){
       if(user !== null){
-        Toast.show({
-          type: 'success',
-          text1: 'Carregando...',
-          text2: 'Carro atual: ' + user.selectedCar?.name,
-        });
         setSelectedCar(user.selectedCar);
       }
     }
