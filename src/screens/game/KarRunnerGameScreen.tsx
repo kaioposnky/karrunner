@@ -3,7 +3,10 @@ import { ThemedButton } from '@/components/themed/ThemedButton';
 import { ThemedText } from '@/components/themed/ThemedText';
 import { ThemedView } from '@/components/themed/ThemedView';
 import { useAuth } from '@/hooks/useAuth';
+import { tryUpdateUserScore } from '@/service/score';
+import { increaseUserBalance } from '@/service/user';
 import { Car } from '@/types/Car';
+import { User } from '@/types/User';
 import { startAccelerometer } from '@/utils/accelerometer';
 import { useNavigation } from '@react-navigation/native';
 import { AccelerometerMeasurement } from 'expo-sensors';
@@ -25,17 +28,18 @@ export const KarRunnerGameScreen = () => {
   if (!accelerometerData || !selectedCar) {
     return <ThemedText>Carregando...</ThemedText>;
   }
-  
+
   const handleGameOver = (score: number) => {
     const executeUpdate = async (user: User, score: number) => {
       await tryUpdateUserScore(user, score);
+      await increaseUserBalance(user.uid, Math.ceil(score/6));
     }
-    
+
     if (user !== null){
       executeUpdate(user, score);
     }
   };
-  
+
   return (
     <ThemedView className="flex-1">
       {/*<ThemedText>KarRunner Game Screen</ThemedText>*/}
@@ -51,7 +55,7 @@ export const KarRunnerGameScreen = () => {
       <KarRunnerGame
         accelerometerData={accelerometerData}
         selectedCar={selectedCar}
-        onGameEnd={(score: number) => console.log("Game Over, your score is ", score)}
+        onGameEnd={handleGameOver}
       />
       <ThemedButton
         title='Voltar'

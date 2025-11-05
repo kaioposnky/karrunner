@@ -1,5 +1,5 @@
 import { User } from '@/types/User';
-import { get, getDatabase, ref } from 'firebase/database';
+import { get, getDatabase, ref, set } from 'firebase/database';
 import { getCarById } from './car';
 import { Car } from '@/types/Car';
 
@@ -45,4 +45,13 @@ export async function getUserProfile(userId: string): Promise<User | null> {
   };
 
   return user;
+}
+
+export async function increaseUserBalance(userId: string, amount: number) {
+  const user: User | null = await getUserProfile(userId);
+  if (user === null) return;
+
+  const dbRef = ref(getDatabase(), `users/${userId}`);
+  user.balance += amount;
+  await set(dbRef, { user });
 }
