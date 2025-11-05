@@ -25,7 +25,17 @@ export const KarRunnerGameScreen = () => {
   if (!accelerometerData || !selectedCar) {
     return <ThemedText>Carregando...</ThemedText>;
   }
-
+  
+  const handleGameOver = (score: number) => {
+    const executeUpdate = async (user: User, score: number) => {
+      await tryUpdateUserScore(user, score);
+    }
+    
+    if (user !== null){
+      executeUpdate(user, score);
+    }
+  };
+  
   return (
     <ThemedView className="flex-1">
       {/*<ThemedText>KarRunner Game Screen</ThemedText>*/}
