@@ -2,8 +2,7 @@ import { Car } from "@/types/Car";
 import { calculatePlayerNewXPosition, checkPlayerColisions } from "@/utils/positionCalculate";
 import { AccelerometerMeasurement } from "expo-sensors";
 import { useEffect, useState } from "react";
-import { Dimensions } from "react-native";
-import { Platform } from "react-native";
+import { Dimensions, Platform } from "react-native";
 
 export type Obstacle = {
   id: string;
@@ -68,6 +67,16 @@ const DEVICE_DIRECTION_MULTIPLIER = Platform.select({
 
 export const useGameEngine = (accelerometerData: AccelerometerMeasurement, selectedCar: Car, shouldRun: boolean) => {
 
+  const getInitialPlayerCar = (selectedCar: Car) : PlayerCar  => {
+    return {
+      carInfo: selectedCar,
+        x: 0,
+          y: PLAYER_CAR_START_Y,
+            width: PLAYER_CAR_WIDTH,
+              height: PLAYER_CAR_HEIGHT
+    }
+  };
+
   // Estados da estrada
   const [roadPosition1, setRoadPosition1] = useState<number>(0);
   const [roadPosition2, setRoadPosition2] = useState<number>(-SCREEN_WIDTH);
@@ -77,15 +86,7 @@ export const useGameEngine = (accelerometerData: AccelerometerMeasurement, selec
   const [obstaclesTimer, setObstaclesTimer] = useState<number>(OBSTACLE_GENERATION_INTERVAL);
 
   // Estados do jogador
-  const [playerCar, setPlayerCar] = useState<PlayerCar>(
-
-    {
-      carInfo: selectedCar,
-      x: 0,
-      y: PLAYER_CAR_START_Y,
-      width: PLAYER_CAR_WIDTH,
-      height: PLAYER_CAR_HEIGHT
-    });
+  const [playerCar, setPlayerCar] = useState<PlayerCar>(getInitialPlayerCar(selectedCar));
 
   // Pontuações e gameState
   const [score, setScore] = useState<number>(0);
@@ -108,31 +109,32 @@ export const useGameEngine = (accelerometerData: AccelerometerMeasurement, selec
       // Mover a estrada no frame
       // ----------------------
 
-      setRoadPosition1(currentPos => {
-        return currentPos >= SCREEN_HEIGHT ? -SCREEN_HEIGHT : currentPos + ROAD_SPEED;
-      });
-      setRoadPosition2(currentPos => {
-        return currentPos >= SCREEN_HEIGHT ? -SCREEN_HEIGHT : currentPos + ROAD_SPEED;
-      });
+      // Removido por estar bugado
+      // setRoadPosition1(currentPos => {
+      //   return currentPos >= SCREEN_HEIGHT ? -SCREEN_HEIGHT : currentPos + ROAD_SPEED;
+      // });
+      // setRoadPosition2(currentPos => {
+      //   return currentPos >= SCREEN_HEIGHT ? -SCREEN_HEIGHT : currentPos + ROAD_SPEED;
+      // });
 
       // ----------------------
       // Mover carro no frame
       // ----------------------
 
-      const actualXPosition = playerCar.x;
-      const speedX = accelerometerData.x * DEVICE_DIRECTION_MULTIPLIER;
+      const actualCarXPosition = playerCar.x;
+      const carSpeedX = accelerometerData.x * DEVICE_DIRECTION_MULTIPLIER;
 
       // Atualiza a posição do carro, considerando os limites da estrada
-      let newXPosition = calculatePlayerNewXPosition(
-        actualXPosition,
-        speedX,
+      let newCarXPosition = calculatePlayerNewXPosition(
+        actualCarXPosition,
+        carSpeedX,
         PLAYER_CAR_SPACE_MOVEMENT_CONSTANT,
         PLAYER_CAR_MAX_SPEED,
         PLAYER_CAR_MIN_SPEED,
         ROAD_LEFT_BORDER,
         SCREEN_WIDTH * 0.75 // NÃO PERGUNTE SOBRE ESSE NÚMERO, APENAS ACEITE
       );
-      setPlayerCar({ ...playerCar, x: newXPosition });
+      setPlayerCar({ ...playerCar, x: newCarXPosition });
 
       // ----------------------
       // Mover e Limpar Obstáculos
@@ -177,7 +179,7 @@ export const useGameEngine = (accelerometerData: AccelerometerMeasurement, selec
       // Logs de Depuração
       // ----------------------
       console.log({
-        carX: newXPosition.toFixed(2),
+        carX: newCarXPosition.toFixed(2),
         obstaclesCount: obstacles.length,
         isGameOver: gameOver,
         nextObstacleIn: obstaclesTimer.toFixed(0),
