@@ -109,3 +109,10 @@ export async function addUserInitialCar(userId: string){
   await addUserCar(userId, car.id);
   await setUserSelectedCar(userId, car.id);
 }
+
+export async function checkUserHasCar(userId: string, carId: string): Promise<boolean> {
+  const dbRef = ref(getDatabase(), `users/${userId}/cars/${carId}`);
+  const snapshot = await get(dbRef);
+
+  return snapshot.exists();
+}

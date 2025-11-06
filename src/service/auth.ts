@@ -4,6 +4,7 @@ import { createPlayerScore } from './score';
 import { UnregisteredUser } from '@/types/UnregisteredUser';
 import { getDatabase, ref, set } from 'firebase/database';
 import { addUserInitialCar } from './car';
+import { increaseUserBalance } from './user';
 
 export const login = async (email: string, password: string): Promise<User> => {
   try {
@@ -53,6 +54,7 @@ export const register = async (unregisteredUser: UnregisteredUser): Promise<User
     // Cria o score do usuário
     await createPlayerScore(user.uid, user.displayName ?? "", user.email ?? "");
 
+    await increaseUserBalance(user.uid, 1000);
     return userCredential.user;
   } catch (error: any) {
     let errorMessage = 'Ocorreu um erro inesperado ao tentar se registrar.';

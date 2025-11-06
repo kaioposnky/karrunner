@@ -1,5 +1,5 @@
 import { User } from '@/types/User';
-import { get, getDatabase, ref, set } from 'firebase/database';
+import { get, getDatabase, ref, update } from 'firebase/database';
 import { getCarById } from './car';
 import { Car } from '@/types/Car';
 
@@ -50,10 +50,21 @@ export async function getUserProfile(userId: string): Promise<User | null> {
 }
 
 export async function increaseUserBalance(userId: string, amount: number) {
-  const user: User | null = await getUserProfile(userId);
-  if (user === null) return;
-
   const dbRef = ref(getDatabase(), `users/${userId}`);
-  user.balance += amount;
-  await set(dbRef, { user });
+  const snapshot = await get(dbRef);
+  if (!snapshot.exists()) return;
+
+  const currentBalance = snapshot.val().balance || 0;
+  const newBalance = currentBalance + amount;
+  await update(dbRef, { balance: newBalance });
+}
+
+export async function decreaseUserBalance(userId: string, amount: number) {
+  const dbRef = ref(getDatabase(), `users/${userId}`);
+  const snapshot = await get(dbRef);
+  if (!snapshot.exists()) return;
+
+  const currentBalance = snapshot.val().balance || 0;
+  const newBalance = currentBalance - amount;
+  await update(dbRef, { balance: newBalance });
 }
