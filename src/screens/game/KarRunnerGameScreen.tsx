@@ -8,17 +8,17 @@ import { getPlayerScore, tryUpdateUserScore } from '@/service/score';
 import { increaseUserBalance } from '@/service/user';
 import { Car } from '@/types/Car';
 import { User } from '@/types/User';
-import { startAccelerometer } from '@/utils/accelerometer';
+import { startAccelerometer, webSimulatedAccelerometer } from '@/utils/accelerometer';
 import { useNavigation } from '@react-navigation/native';
 import { AccelerometerMeasurement } from 'expo-sensors';
 import { useEffect, useState } from 'react';
+import { Platform } from 'react-native';
 
 export const KarRunnerGameScreen = () => {
   const { user } = useAuth();
   const [accelerometerData, setAccelerometerData] = useState<AccelerometerMeasurement | null>(null);
   const [selectedCar, setSelectedCar] = useState<Car | null>(null);
   const [highestScore, setHighestScore] = useState<number | null>(null);
-  const navigation = useNavigation();
 
   useEffect(() => {
     if (user !== null) {
@@ -26,7 +26,11 @@ export const KarRunnerGameScreen = () => {
         userScore => setHighestScore(userScore.score)
       );
       setSelectedCar(user.selectedCar);
-      startAccelerometer(setAccelerometerData);
+      if (Platform.OS === 'web') {
+        webSimulatedAccelerometer(setAccelerometerData);
+      } else {
+        startAccelerometer(setAccelerometerData);
+      }
     }
   }, [user]);
 
@@ -47,7 +51,9 @@ export const KarRunnerGameScreen = () => {
 
   return (
     <ThemedView className="flex-1">
-      <GoBackButton/>
+      <GoBackButton
+        style={{ position: 'absolute', top: 50, left: 0, right: 0, zIndex: 2 }}
+      />
       <ThemedView
         center='both'
         disableBg={true}

@@ -4,3 +4,10 @@ export const startAccelerometer = (listener: (data: AccelerometerMeasurement) =>
   Accelerometer.setUpdateInterval(100);
   Accelerometer.addListener(listener);
 };
+
+export const webSimulatedAccelerometer = (listener: (data: AccelerometerMeasurement) => void) => {
+  const interval = setInterval(() => {
+    listener({ x: Math.random() * 2 - 1, y: Math.random() * 2 - 1, z: Math.random() * 2 - 1, timestamp: Date.now() });
+  }, 100);
+  return () => clearInterval(interval);
+};
