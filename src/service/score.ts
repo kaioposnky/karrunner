@@ -70,7 +70,9 @@ export async function getAllScores(limit?: number): Promise<UserScore[]> {
 
 export async function updatePlayerScore(userId: string, score: number): Promise<void> {
   const dbRef = ref(getDatabase(), 'scores/' + userId);
-  await set(dbRef, { score });
+  const playerScore = await getPlayerScore(userId);
+  playerScore.score = score;
+  await set(dbRef, { playerScore });
 }
 
 export const tryUpdateUserScore = async (user: User, score: number) => {
