@@ -20,6 +20,10 @@ export const GameMainMenu = () => {
     );
   }
 
+  const goToKarRunner = () => {
+    gameNav.navigate("KarRunnerGameScreen");
+  }
+
   const goToCarSpin = () => {
     gameNav.navigate("CarSpinScreen");
   };
@@ -42,6 +46,7 @@ export const GameMainMenu = () => {
           className="gap-y-5"
         >
           <Header/>
+          <ThemedButton title="Iniciar Jogo" onPress={goToKarRunner} />
           <ThemedButton title="Roletar Carro" onPress={goToCarSpin} />
           <ThemedButton title="Trocar carro" onPress={goToCarSelection} />
           <ThemedButton title="Leaderboard" onPress={goToLeaderboard} />

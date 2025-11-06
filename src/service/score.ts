@@ -1,3 +1,4 @@
+import { User } from '@/types/User';
 import { UserScore } from '@/types/UserScore';
 import { getDatabase, ref, set, get, child, orderByChild, query, limitToLast } from 'firebase/database';
 
@@ -65,4 +66,18 @@ export async function getAllScores(limit?: number): Promise<UserScore[]> {
       throw new Error(errorMessage);
     });
   return scores;
+}
+
+export async function updatePlayerScore(userId: string, score: number): Promise<void> {
+  const dbRef = ref(getDatabase(), 'scores/' + userId);
+  const playerScore = await getPlayerScore(userId);
+  playerScore.score = score;
+  await set(dbRef, { playerScore });
+}
+
+export const tryUpdateUserScore = async (user: User, score: number) => {
+  const userMaxScore = await getPlayerScore(user.uid);
+  if(score > userMaxScore.score){
+    await updatePlayerScore(user.uid, score);
+  }
 }
