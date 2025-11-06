@@ -9,6 +9,7 @@ interface UserProfileFromDB {
   email: string;
   cars?: { [id: string]: boolean };
   selectedCar?: string;
+  balance: number;
 }
 
 export async function getUserProfile(userId: string): Promise<User | null> {
@@ -42,6 +43,7 @@ export async function getUserProfile(userId: string): Promise<User | null> {
     email: dbProfile.email,
     cars: ownedCars,
     selectedCar: selectedCar,
+    balance: dbProfile.balance,
   };
 
   return user;

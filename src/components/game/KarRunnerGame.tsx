@@ -7,18 +7,20 @@ import { useGameEngine } from "@/hooks/useGameEngine";
 import { ObstacleComponent } from "./ObstacleComponent";
 import { Image } from "react-native";
 import roadImage from "@/assets/game/road.png";
+import { GameOverModal } from "./GameOverModal";
 
 interface KarRunnerGameProps {
   accelerometerData: AccelerometerMeasurement;
   selectedCar: Car;
   onGameEnd: (score: number) => void;
+  highScore: number;
 }
 
 // Carregue sua imagem da estrada (ajuste o caminho se necessário)
 
-export const KarRunnerGame = ({ accelerometerData, selectedCar, onGameEnd }: KarRunnerGameProps) => {
+export const KarRunnerGame = ({ accelerometerData, selectedCar, onGameEnd, highScore }: KarRunnerGameProps) => {
   // Toda a lógica de atualização do jogo é feita pelo hook de Game Engine
-  const { obstacles, playerCar, score, highScore, gameOver, roadPosition1, roadPosition2 } =
+  const { obstacles, playerCar, score, gameOver, roadPosition1, roadPosition2, restartGame } =
     useGameEngine(accelerometerData, selectedCar, true);
 
   useEffect(() => {
@@ -71,6 +73,14 @@ export const KarRunnerGame = ({ accelerometerData, selectedCar, onGameEnd }: Kar
           />
         );
       })}
+
+      <GameOverModal
+        score={score}
+        highScore={highScore}
+        onPlayAgain={restartGame}
+        visible={gameOver}
+      />
+
     </ThemedView>
   );
 };

@@ -3,7 +3,7 @@ import { ThemedButton } from '@/components/themed/ThemedButton';
 import { ThemedText } from '@/components/themed/ThemedText';
 import { ThemedView } from '@/components/themed/ThemedView';
 import { useAuth } from '@/hooks/useAuth';
-import { tryUpdateUserScore } from '@/service/score';
+import { getPlayerScore, tryUpdateUserScore } from '@/service/score';
 import { increaseUserBalance } from '@/service/user';
 import { Car } from '@/types/Car';
 import { User } from '@/types/User';
@@ -16,10 +16,14 @@ export const KarRunnerGameScreen = () => {
   const { user } = useAuth();
   const [accelerometerData, setAccelerometerData] = useState<AccelerometerMeasurement | null>(null);
   const [selectedCar, setSelectedCar] = useState<Car | null>(null);
+  const [highestScore, setHighestScore] = useState<number | null>(null);
   const navigation = useNavigation();
 
   useEffect(() => {
     if (user !== null) {
+      getPlayerScore(user.uid).then(
+        userScore => setHighestScore(userScore.score)
+      );
       setSelectedCar(user.selectedCar);
       startAccelerometer(setAccelerometerData);
     }
@@ -32,7 +36,7 @@ export const KarRunnerGameScreen = () => {
   const handleGameOver = (score: number) => {
     const executeUpdate = async (user: User, score: number) => {
       await tryUpdateUserScore(user, score);
-      await increaseUserBalance(user.uid, Math.ceil(score/6));
+      await increaseUserBalance(user.uid, Math.ceil(score));
     }
 
     if (user !== null){
@@ -56,7 +60,8 @@ export const KarRunnerGameScreen = () => {
         accelerometerData={accelerometerData}
         selectedCar={selectedCar}
         onGameEnd={handleGameOver}
-      />
+        highScore={highestScore ?? 0}
+        />
       <ThemedButton
         title='Voltar'
         className={'mb-10'}

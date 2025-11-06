@@ -89,7 +89,6 @@ export const useGameEngine = (accelerometerData: AccelerometerMeasurement, selec
 
   // Pontuações e gameState
   const [score, setScore] = useState<number>(0);
-  const [highScore, setHighScore] = useState<number>(0);
   const [gameOver, setGameOver] = useState<boolean>(false);
 
   useEffect(() => {
@@ -183,18 +182,32 @@ export const useGameEngine = (accelerometerData: AccelerometerMeasurement, selec
         isGameOver: gameOver,
         nextObstacleIn: obstaclesTimer.toFixed(0),
       });
+
+      // ----------------------
+      // Aumentar Pontuação
+      // ----------------------
+
+      setScore((s) => s + 1/6);
+
     }, GAME_TICKS_IN_MS);
 
     return () => clearInterval(gameLoop);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accelerometerData, shouldRun, gameOver]);
 
+  const restartGame = () => {
+    setScore(0);
+    setObstacles([]);
+    setPlayerCar(getInitialPlayerCar(selectedCar));
+    setGameOver(false);
+  }
+
   return {
     obstacles,
     playerCar,
     score,
-    highScore,
     gameOver,
+    restartGame,
     roadPosition1,
     roadPosition2
   };
