@@ -3,7 +3,7 @@ import { get, getDatabase, ref, update } from 'firebase/database';
 import { getCarById } from './car';
 import { Car } from '@/types/Car';
 
-interface UserProfileFromDB {
+export interface UserProfileFromDB {
   uid: string;
   displayName: string;
   email: string;
@@ -22,31 +22,7 @@ export async function getUserProfile(userId: string): Promise<User | null> {
 
   const dbProfile = snapshot.val() as UserProfileFromDB;
 
-  // Pega todos os carros que o usuário possui
-  let ownedCars: Car[] = [];
-  if (dbProfile.cars) {
-    const carIds = Object.keys(dbProfile.cars);
-    const carPromises = carIds.map(id => getCarById(id));
-    const results = await Promise.all(carPromises);
-    ownedCars = results.filter((car): car is Car => car !== null);
-  }
-
-  // Pega o carro selecionado pelo usuário
-  let selectedCar: Car | null = null;
-  if (dbProfile.selectedCar) {
-    selectedCar = await getCarById(dbProfile.selectedCar);
-  }
-
-  const user: User = {
-    uid: dbProfile.uid,
-    displayName: dbProfile.displayName,
-    email: dbProfile.email,
-    cars: ownedCars,
-    selectedCar: selectedCar,
-    balance: dbProfile.balance,
-  };
-
-  return user;
+  return await userProfileToUser(dbProfile);
 }
 
 export async function increaseUserBalance(userId: string, amount: number) {
@@ -67,4 +43,38 @@ export async function decreaseUserBalance(userId: string, amount: number) {
   const currentBalance = snapshot.val().balance || 0;
   const newBalance = currentBalance - amount;
   await update(dbRef, { balance: newBalance });
+}
+
+export function getUserRef(userId: string){
+  const dbRef = ref(getDatabase(), `users/${userId}`);
+  return dbRef;
+}
+
+export async function userProfileToUser(userProfile: UserProfileFromDB): Promise<User> {
+
+  // Pega todos os carros que o usuário possui
+  let ownedCars: Car[] = [];
+  if (userProfile.cars) {
+    const carIds = Object.keys(userProfile.cars);
+    const carPromises = carIds.map(id => getCarById(id));
+    const results = await Promise.all(carPromises);
+    ownedCars = results.filter((car): car is Car => car !== null);
+  }
+
+  // Pega o carro selecionado pelo usuário
+  let selectedCar: Car | null = null;
+  if (userProfile.selectedCar) {
+    selectedCar = await getCarById(userProfile.selectedCar);
+  }
+
+  const user: User = {
+    uid: userProfile.uid,
+    displayName: userProfile.displayName,
+    email: userProfile.email,
+    cars: ownedCars,
+    selectedCar: selectedCar,
+    balance: userProfile.balance,
+  };
+
+  return user;
 }

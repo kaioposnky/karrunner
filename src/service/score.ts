@@ -1,6 +1,6 @@
 import { User } from '@/types/User';
 import { UserScore } from '@/types/UserScore';
-import { getDatabase, ref, set, get, child, orderByChild, query, limitToLast } from 'firebase/database';
+import { getDatabase, ref, set, get, child, orderByChild, query, limitToLast, update } from 'firebase/database';
 
 export async function createPlayerScore(
   userId: string,
@@ -70,9 +70,7 @@ export async function getAllScores(limit?: number): Promise<UserScore[]> {
 
 export async function updatePlayerScore(userId: string, score: number): Promise<void> {
   const dbRef = ref(getDatabase(), 'scores/' + userId);
-  const playerScore = await getPlayerScore(userId);
-  playerScore.score = score;
-  await set(dbRef, { playerScore });
+  await update(dbRef, { score: Math.round(score) });
 }
 
 export const tryUpdateUserScore = async (user: User, score: number) => {
