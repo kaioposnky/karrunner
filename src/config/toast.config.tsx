@@ -31,4 +31,20 @@ export const toastConfig = {
       text2NumberOfLines={5}
     />
   ),
+  info: (props: ToastProps) => (
+    <BaseToast
+      text1='Info!'
+      {...props}
+      style={{ borderLeftColor: 'blue', height: 'auto', minHeight: 60, paddingVertical: 10 }}
+      contentContainerStyle={{ paddingHorizontal: 15 }}
+      text1Style={{
+        fontSize: 25,
+        fontWeight: '400'
+      }}
+      text2Style={{
+        fontSize: 20,
+      }}
+      text2NumberOfLines={5}
+    />
+  ),
 };

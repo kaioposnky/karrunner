@@ -1,4 +1,5 @@
 import { KarRunnerGame } from '@/components/game/KarRunnerGame';
+import { GoBackButton } from '@/components/themed/GoBackButton';
 import { ThemedButton } from '@/components/themed/ThemedButton';
 import { ThemedText } from '@/components/themed/ThemedText';
 import { ThemedView } from '@/components/themed/ThemedView';
@@ -46,7 +47,7 @@ export const KarRunnerGameScreen = () => {
 
   return (
     <ThemedView className="flex-1">
-      {/*<ThemedText>KarRunner Game Screen</ThemedText>*/}
+      <GoBackButton/>
       <ThemedView
         center='both'
         disableBg={true}
@@ -62,11 +63,6 @@ export const KarRunnerGameScreen = () => {
         onGameEnd={handleGameOver}
         highScore={highestScore ?? 0}
         />
-      <ThemedButton
-        title='Voltar'
-        className={'mb-10'}
-        onPress={() => navigation.goBack()}
-      />
     </ThemedView>
   );
 };

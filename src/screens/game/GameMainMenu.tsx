@@ -46,12 +46,12 @@ export const GameMainMenu = () => {
           className="gap-y-5"
         >
           <Header/>
-          <ThemedButton title="Iniciar Jogo" onPress={goToKarRunner} />
-          <ThemedButton title="Roletar Carro" onPress={goToCarSpin} />
-          <ThemedButton title="Trocar carro" onPress={goToCarSelection} />
-          <ThemedButton title="Leaderboard" onPress={goToLeaderboard} />
-          <ThemedButton title="Estatísticas" onPress={goToPlayerStats} />
-          <ThemedButton title="Sair" className="bg-red-500" onPress={goToAuth} />
+          <ThemedButton title="Iniciar Jogo" onPress={goToKarRunner} className="w-64" />
+          <ThemedButton title="Roletar Carro" onPress={goToCarSpin} className="w-64" />
+          <ThemedButton title="Trocar carro" onPress={goToCarSelection} className="w-64" />
+          <ThemedButton title="Leaderboard" onPress={goToLeaderboard} className="w-64" />
+          <ThemedButton title="Estatísticas" onPress={goToPlayerStats} className="w-64" />
+          <ThemedButton title="Sair" className="w-64 bg-red-500" onPress={goToAuth} />
         </ThemedView>
     );
 };

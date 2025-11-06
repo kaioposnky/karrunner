@@ -1,4 +1,5 @@
 import { CarSelectList } from '@/components/car/CarSelectList';
+import { GoBackButton } from '@/components/themed/GoBackButton';
 import { ThemedButton } from '@/components/themed/ThemedButton';
 import { ThemedText } from '@/components/themed/ThemedText';
 import { ThemedView } from '@/components/themed/ThemedView';
@@ -83,12 +84,7 @@ export const CarSelection = () => {
         selectedCar={selectedCar}
         onCarSelect={handleCarSelect}
       />
-      <ThemedButton
-        title={'Voltar'}
-        onPress={goBack}
-        variant='primary'
-        className='mb-8 mt-2'
-      />
+      <GoBackButton/>
     </ThemedView>
   );
 };
