@@ -1,6 +1,5 @@
 import { CarSelectList } from '@/components/car/CarSelectList';
 import { GoBackButton } from '@/components/themed/GoBackButton';
-import { ThemedButton } from '@/components/themed/ThemedButton';
 import { ThemedText } from '@/components/themed/ThemedText';
 import { ThemedView } from '@/components/themed/ThemedView';
 import { useAuth } from '@/hooks/useAuth';
@@ -10,8 +9,9 @@ import { RootNavigationList } from '@/types/RootNavigationList';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useCallback, useEffect, useState } from 'react';
+import Toaster from 'react-native-toast-message';
 
-export const CarSelection = () => {
+export const CarSelectionScreen = () => {
   const [allCars, setAllCars] = useState<Car[]>([]);
   const { user, isLoading } = useAuth();
   const [selectedCar, setSelectedCar] = useState(user?.selectedCar ?? null);
@@ -54,6 +54,10 @@ export const CarSelection = () => {
     if(car === user.selectedCar) return;
     setSelectedCar(car);
     setUserSelectedCar(user.uid, car.id);
+    Toaster.show({
+      type: 'info',
+      text2: `${car.name} selecionado com sucesso!`,
+    })
   };
 
   if (isLoading || !user) {
@@ -84,7 +88,7 @@ export const CarSelection = () => {
         selectedCar={selectedCar}
         onCarSelect={handleCarSelect}
       />
-      <GoBackButton/>
+      <GoBackButton className='mb-12'/>
     </ThemedView>
   );
 };

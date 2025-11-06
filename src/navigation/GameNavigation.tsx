@@ -1,7 +1,7 @@
 import { ThemedText } from '@/components/themed/ThemedText';
 import { createStackNavigator } from '@react-navigation/stack';
 import { LeaderBoardScreen } from '@/screens/game/LeaderBoardScreen';
-import { CarSelection } from '@/screens/game/CarSelection';
+import { CarSelectionScreen } from '@/screens/game/CarSelectionScreen';
 import { CarSpinScreen } from '@/screens/game/CarSpinScreen';
 import { GameMainMenu } from '@/screens/game/GameMainMenu';
 import { KarRunnerGameScreen } from '@/screens/game/KarRunnerGameScreen';
@@ -36,7 +36,7 @@ export const GameNavigation = () => {
       />
       <Stack.Screen
         name={CarSelectionStackScreen}
-        component={CarSelection}
+        component={CarSelectionScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen
