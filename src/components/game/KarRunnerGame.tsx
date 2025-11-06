@@ -27,7 +27,8 @@ export const KarRunnerGame = ({ accelerometerData, selectedCar, onGameEnd, highS
     if (gameOver) {
       onGameEnd(score);
     }
-  }, [gameOver, onGameEnd, score]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [gameOver]);
 
   return (
     <ThemedView className="flex-1">

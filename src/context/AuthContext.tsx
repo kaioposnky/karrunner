@@ -3,7 +3,8 @@ import { createContext, ReactNode, useEffect, useState } from "react";
 import { login as loginUser } from '@/service/auth';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { auth } from '@/config/firebase.config';
-import { getUserProfile } from "@/service/user";
+import { getUserProfile, getUserRef, UserProfileFromDB, userProfileToUser } from "@/service/user";
+import { onValue } from "firebase/database";
 
 export interface AuthContextType{
   isAuthenticated: boolean;
@@ -22,15 +23,23 @@ export const AuthProvider = ({children} : {children: ReactNode}) => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      let unsubscribeUserListener = () => {};
       if (firebaseUser) {
         const userInfo: User | null = await getUserProfile(firebaseUser.uid);
         setUser(userInfo);
         setIsAuthenticated(true);
+        unsubscribeUserListener = onValue(getUserRef(firebaseUser.uid), async (snapshot) => {
+          const newUserProfileInfo = snapshot.val() as UserProfileFromDB;
+          const newUserInfo = await userProfileToUser(newUserProfileInfo);
+          setUser(newUserInfo);
+        });
       } else {
         setUser(null);
         setIsAuthenticated(false);
       }
       setLoading(false);
+
+      return () => unsubscribeUserListener();
     });
 
     // Remove o estado de autenticado
