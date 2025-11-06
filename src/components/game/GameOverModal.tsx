@@ -3,6 +3,7 @@ import { ThemedView } from "../themed/ThemedView";
 import { ThemedText } from "../themed/ThemedText";
 import { ThemedButton } from "../themed/ThemedButton";
 import { useNavigation } from "@react-navigation/native";
+import { GoBackButton } from "../themed/GoBackButton";
 
 export const GameOverModal = ({
   score,
@@ -26,7 +27,7 @@ export const GameOverModal = ({
           <ThemedText className="text-2xl">Pontuação: <Text className="font-bold">{Math.ceil(score)}</Text></ThemedText>
           <ThemedText className="text-xl">Maior Pontuação: <Text className="font-bold">{Math.ceil(highScore)}</Text></ThemedText>
           <ThemedButton title="Jogar novamente" onPress={onRestart} />
-          <ThemedButton className="bg-red-600" title="Voltar" onPress={navigation.goBack} />
+          <GoBackButton/>
         </ThemedView>
       </View>
     </Modal>

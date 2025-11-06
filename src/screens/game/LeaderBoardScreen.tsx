@@ -1,3 +1,4 @@
+import { GoBackButton } from '@/components/themed/GoBackButton';
 import { ThemedButton } from '@/components/themed/ThemedButton';
 import { ThemedText } from '@/components/themed/ThemedText';
 import { ThemedView } from '@/components/themed/ThemedView';
@@ -9,7 +10,7 @@ import { useEffect, useState } from 'react';
 export const LeaderBoardScreen = () => {
   const [userScores, setUserScores] = useState<UserScore[]>([]);
   const [limit, setLimit] = useState<number>(10);
-  
+
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -30,7 +31,7 @@ export const LeaderBoardScreen = () => {
     if (userScores.length < limit) return;
     setLimit((prev) => prev + 5);
   };
-  
+
   const goBack = () => {
     navigation.goBack();
   };
@@ -68,7 +69,7 @@ export const LeaderBoardScreen = () => {
       </ThemedView>
 
       <ThemedButton title="Carregar Mais" onPress={handleLoadMore} className="mt-6" />
-      <ThemedButton title="Voltar" onPress={goBack} className="mt-6" />
+      <GoBackButton/>
     </ThemedView>
   );
 };

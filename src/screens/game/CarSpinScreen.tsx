@@ -107,6 +107,7 @@ export const CarSpinScreen = () => {
       {/* Botão de voltar */}
       <ThemedButton
         title={isSpinning ? 'Girando...' : 'Voltar'}
+        className='bg-red-500'
         onPress={goBack}
         disabled={isSpinning || shouldSpin}
         size="large"
