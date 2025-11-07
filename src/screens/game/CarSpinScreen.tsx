@@ -7,14 +7,26 @@ import { CarSpinReel } from '@/components/reel/CarSpinReel';
 import { useTheme } from '@/hooks/useTheme';
 import { useNavigation } from '@react-navigation/native';
 import { GameNavigationProps } from '@/types/GameNavigationList';
-import { Modal } from 'react-native';
+import { Modal, Image } from 'react-native';
 import { getAllCars } from '@/service/car';
+import { useAuth } from '@/hooks/useAuth';
+import { useCarSpin } from '@/hooks/useCarSpin';
+import { Rarity } from '@/types/Rarity';
 
 export const CarSpinScreen = () => {
   const [allCars, setAllCars] = useState<Car[]>([]);
-  const [shouldSpin, setShouldSpin] = useState(false);
-  const [selectedCar, setSelectedCar] = useState<Car | null>(null);
-  const [isSpinning, setIsSpinning] = useState(false);
+  const { user, isLoading } = useAuth();
+  const {
+    shouldSpin,
+    selectedCar,
+    isSpinning,
+    handleSpinStart,
+    handleSpinEnd,
+    handleRedeem,
+    spinReel,
+    SPIN_COST,
+    balance,
+  } = useCarSpin(user, isLoading);
 
   useEffect(() => {
     const fetchCars = async () => {
@@ -24,44 +36,35 @@ export const CarSpinScreen = () => {
 
     fetchCars();
   }, []);
-
-  const navigation = useNavigation<GameNavigationProps>();
   const { theme } = useTheme();
 
-  const handleSpinStart = () => {
-    setIsSpinning(true);
-    setSelectedCar(null);
-  };
-
-  const handleSpinComplete = (car: Car) => {
-    setSelectedCar(car);
-    setShouldSpin(false);
-    setIsSpinning(false);
-  };
-
-  const handleRedeem = () => {
-    setSelectedCar(null);
-  };
-
-  const startSpin = () => {
-    if (!shouldSpin) {
-      setIsSpinning(true);
-      setShouldSpin(true);
-    }
-  };
+  const navigation = useNavigation<GameNavigationProps>();
 
   const goBack = () => {
     navigation.goBack();
   };
 
+  const capitalize = (str: string) => {
+    if (!str) return '';
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  };
+
+  const rarityColors = {
+    common: { color: 'text-rarity-common' },
+    rare: { color: 'text-rarity-rare' },
+    epic: { color: 'text-rarity-epic' },
+    legendary: { color: 'text-rarity-legendary' },
+  };
+
   const themeBg = theme === 'dark' ? 'bg-secondary-dark' : 'bg-secondary-light';
   const borderBg = theme === 'dark' ? 'border-secondary-dark' : 'border-secondary-light';
-  const REEL_CONTAINER_HEIGHT = 20 * 24;
-  const ITEM_SIZE = 120;
+  const REEL_CONTAINER_HEIGHT = 15 * 24; // Tamanho do container da roleta
+  const ITEM_SIZE = 120; // Não mexer, se não buga o layout
 
   return (
     <ThemedView center="horizontal" className="gap-6 p-4">
       <ThemedText className="mt-20 text-5xl font-bold">🎰 Roletar Carros</ThemedText>
+      <ThemedText variant='title'>Você possui ${balance} em sua conta</ThemedText>
 
       {/* Área da roleta */}
       <ThemedView
@@ -72,7 +75,7 @@ export const CarSpinScreen = () => {
             cars={allCars}
             shouldSpin={shouldSpin}
             onSpin={handleSpinStart}
-            onSpinComplete={handleSpinComplete}
+            onSpinComplete={handleSpinEnd}
             itemSize={ITEM_SIZE}
             containerHeight={REEL_CONTAINER_HEIGHT}
             offset={0}
@@ -94,12 +97,11 @@ export const CarSpinScreen = () => {
         </ThemedView>
       </ThemedView>
 
-
       {/* Botão de girar */}
       <ThemedButton
-        title={isSpinning ? 'Girando...' : 'Roletar carro! $1000'}
+        title={isSpinning ? 'Girando...' : `Roletar carro! $${SPIN_COST}`}
         className={'text-bold bg-yellow-600'}
-        onPress={startSpin}
+        onPress={spinReel}
         disabled={isSpinning || shouldSpin}
         size="large"
       />
@@ -107,6 +109,7 @@ export const CarSpinScreen = () => {
       {/* Botão de voltar */}
       <ThemedButton
         title={isSpinning ? 'Girando...' : 'Voltar'}
+        className='bg-red-500'
         onPress={goBack}
         disabled={isSpinning || shouldSpin}
         size="large"
@@ -122,9 +125,16 @@ export const CarSpinScreen = () => {
           <ThemedView className={`flex-1 items-center justify-center bg-black/50 `}>
             <ThemedView className={`w-4/5 max-w-sm items-center gap-4 rounded-lg p-6 ${borderBg}`}>
               <ThemedText className="text-2xl font-bold">🏆 Você ganhou:</ThemedText>
+              <Image
+                source={{ uri: selectedCar.images.select }}
+                className="aspect-video w-full"
+              />
               <ThemedText className="text-xl">{selectedCar.name}</ThemedText>
               <ThemedText className="text-base opacity-80">
-                Raridade: {selectedCar.rarity}
+                Raridade:{' '}
+                <ThemedText className={`font-bold ${rarityColors[selectedCar.rarity].color}`}>
+                  {capitalize(selectedCar.rarity)}
+                </ThemedText>
               </ThemedText>
               <ThemedButton title="Resgatar" onPress={handleRedeem} size="large" />
             </ThemedView>

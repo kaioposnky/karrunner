@@ -20,6 +20,10 @@ export const GameMainMenu = () => {
     );
   }
 
+  const goToKarRunner = () => {
+    gameNav.navigate("KarRunnerGameScreen");
+  }
+
   const goToCarSpin = () => {
     gameNav.navigate("CarSpinScreen");
   };
