@@ -1,15 +1,14 @@
 import { KarRunnerGame } from '@/components/game/KarRunnerGame';
 import { GoBackButton } from '@/components/themed/GoBackButton';
-import { ThemedButton } from '@/components/themed/ThemedButton';
 import { ThemedText } from '@/components/themed/ThemedText';
 import { ThemedView } from '@/components/themed/ThemedView';
 import { useAuth } from '@/hooks/useAuth';
+import { getAllCars } from '@/service/car';
 import { getPlayerScore, tryUpdateUserScore } from '@/service/score';
 import { increaseUserBalance } from '@/service/user';
 import { Car } from '@/types/Car';
 import { User } from '@/types/User';
 import { startAccelerometer, webSimulatedAccelerometer } from '@/utils/accelerometer';
-import { useNavigation } from '@react-navigation/native';
 import { AccelerometerMeasurement } from 'expo-sensors';
 import { useEffect, useState } from 'react';
 import { Platform } from 'react-native';
@@ -19,6 +18,7 @@ export const KarRunnerGameScreen = () => {
   const [accelerometerData, setAccelerometerData] = useState<AccelerometerMeasurement | null>(null);
   const [selectedCar, setSelectedCar] = useState<Car | null>(null);
   const [highestScore, setHighestScore] = useState<number | null>(null);
+  const [allCars, setAllCars] = useState<Car[] | null>(null);
 
   useEffect(() => {
     if (user !== null) {
@@ -28,9 +28,13 @@ export const KarRunnerGameScreen = () => {
       setSelectedCar(user.selectedCar);
       if (Platform.OS === 'web') {
         webSimulatedAccelerometer(setAccelerometerData);
-      } else {
+      }
+      else {
         startAccelerometer(setAccelerometerData);
       }
+      getAllCars().then(
+        cars => setAllCars(cars)
+      );
     }
   }, [user]);
 
@@ -68,6 +72,7 @@ export const KarRunnerGameScreen = () => {
         selectedCar={selectedCar}
         onGameEnd={handleGameOver}
         highScore={highestScore ?? 0}
+        allCars={allCars}
         />
     </ThemedView>
   );

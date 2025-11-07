@@ -10,6 +10,7 @@ export type Obstacle = {
   y: number;
   width: number;
   height: number;
+  imageUrl?: string;
 };
 
 export type PlayerCar = {
@@ -29,7 +30,7 @@ const FRAME_RATE = 60; // 60 FPS
 const GAME_TICKS_IN_MS = 1000 / FRAME_RATE;
 
 // Constantes do jogador
-const PLAYER_CAR_WIDTH = 60;
+const PLAYER_CAR_WIDTH = 25;
 const PLAYER_CAR_HEIGHT = 60;
 const PLAYER_CAR_START_Y = -65 + SCREEN_HEIGHT - PLAYER_CAR_HEIGHT * 2; // Posição inicial Y do carro
 const PLAYER_CAR_MAX_SPEED = 0.7; // Não passa de 0.5 e -0.5, limite do acelerômetro
@@ -37,7 +38,7 @@ const PLAYER_CAR_MIN_SPEED = 0.05; // Não passa de 0.1 e -0.1, deadzone do acel
 const PLAYER_CAR_SPACE_MOVEMENT_CONSTANT = 50; // Sensibilidade do movimento do carro
 
 // Constantes dos Objetos do mapa
-const OBSTACLE_WIDTH = 60;
+const OBSTACLE_WIDTH = 25;
 const OBSTACLE_HEIGHT = 60;
 const OBSTACLE_START_Y_POSITION = -100;
 const OBSTACLE_GENERATION_INTERVAL = 700; // Intervalo de tempo entre a geração de obstáculos em ms
@@ -65,7 +66,7 @@ const DEVICE_DIRECTION_MULTIPLIER = Platform.select({
   default: 1
 });
 
-export const useGameEngine = (accelerometerData: AccelerometerMeasurement, selectedCar: Car, shouldRun: boolean) => {
+export const useGameEngine = (accelerometerData: AccelerometerMeasurement, selectedCar: Car, shouldRun: boolean, allCars: Car[] | null) => {
 
   const getInitialPlayerCar = (selectedCar: Car) : PlayerCar  => {
     return {
@@ -161,12 +162,14 @@ export const useGameEngine = (accelerometerData: AccelerometerMeasurement, selec
       setObstaclesTimer((currentTimer) => {
         if (currentTimer <= 0) {
           setObstacles((currentObs) => {
+            const randomCarImage = allCars?.[Math.floor(Math.random() * allCars.length)]?.images?.run;
             const newObstacle: Obstacle = {
               id: Date.now().toString(),
               y: OBSTACLE_START_Y_POSITION,
               x: randomLanePositionInRoad(),
               width: OBSTACLE_WIDTH,
               height: OBSTACLE_HEIGHT,
+              imageUrl: randomCarImage || "https://i.postimg.cc/zfnyVrCQ/hb20s.png"
             };
             return [...currentObs, newObstacle];
           });

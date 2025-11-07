@@ -14,14 +14,15 @@ interface KarRunnerGameProps {
   selectedCar: Car;
   onGameEnd: (score: number) => void;
   highScore: number;
+  allCars: Car[] | null;
 }
 
 // Carregue sua imagem da estrada (ajuste o caminho se necessário)
 
-export const KarRunnerGame = ({ accelerometerData, selectedCar, onGameEnd, highScore }: KarRunnerGameProps) => {
+export const KarRunnerGame = ({ accelerometerData, selectedCar, onGameEnd, highScore, allCars }: KarRunnerGameProps) => {
   // Toda a lógica de atualização do jogo é feita pelo hook de Game Engine
   const { obstacles, playerCar, score, gameOver, roadPosition1, roadPosition2, restartGame } =
-    useGameEngine(accelerometerData, selectedCar, true);
+    useGameEngine(accelerometerData, selectedCar, true, allCars);
 
   useEffect(() => {
     if (gameOver) {
@@ -71,6 +72,7 @@ export const KarRunnerGame = ({ accelerometerData, selectedCar, onGameEnd, highS
               transform: [{ translateX: obstacle.x }, { translateY: obstacle.y }]
             }}
             obstacle={obstacle}
+            imageUrl={obstacle.imageUrl}
           />
         );
       })}
