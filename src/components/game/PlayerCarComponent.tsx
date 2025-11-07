@@ -6,7 +6,7 @@ export const PlayerCarComponent = ({ car, style }: { car: PlayerCar, style?: Sty
   return (
     <ThemedView disableBg style={style} className="border-t-stone-600 border-4">
       <Image
-        source={{ uri: "https://i.postimg.cc/8Ch7jSRw/fusca-branco.png" }}
+        source={{ uri: car.carInfo.images.run }}
         style={{ width: car.width, height: car.height }}
       />
     </ThemedView>
