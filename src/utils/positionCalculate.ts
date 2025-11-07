@@ -1,4 +1,4 @@
-import { Obstacle, PlayerCar } from "@/hooks/useGameEngine";
+import { Obstacle, PlayerCar } from "@/types/Game";
 
 export const calculatePlayerNewXPosition = (
   actualPosition: number,

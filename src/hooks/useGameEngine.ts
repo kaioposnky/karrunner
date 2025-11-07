@@ -1,25 +1,12 @@
 import { Car } from "@/types/Car";
-import { calculatePlayerNewXPosition, checkPlayerColisions } from "@/utils/positionCalculate";
+import { Obstacle, PlayerCar } from "@/types/Game";
+import {
+  calculatePlayerNewXPosition,
+  checkPlayerColisions,
+} from "@/utils/positionCalculate";
 import { AccelerometerMeasurement } from "expo-sensors";
 import { useEffect, useState } from "react";
 import { Dimensions, Platform } from "react-native";
-
-export type Obstacle = {
-  id: string;
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  imageUrl?: string;
-};
-
-export type PlayerCar = {
-  carInfo: Car;
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-}
 
 // Dimensões da tela
 const SCREEN_HEIGHT = Dimensions.get('window').height;
@@ -54,10 +41,10 @@ const ROAD_SPEED = 5; // Velocidade da estrada
 const ROAD_LANE_WIDTH = ROAD_WIDTH / ROAD_LANES;
 const ITEM_WIDTH_FOR_CENTER = OBSTACLE_WIDTH;
 const LANE_POSITIONS = [ // Posições das faixas
-  ROAD_LEFT_BORDER + ROAD_LANE_WIDTH * 0.6 - ITEM_WIDTH_FOR_CENTER / 2 + LANE_MAGIC_OFFSET - 15,
-  ROAD_LEFT_BORDER + ROAD_LANE_WIDTH * 1.6 - ITEM_WIDTH_FOR_CENTER / 2 + LANE_MAGIC_OFFSET - 8,
-  ROAD_LEFT_BORDER + ROAD_LANE_WIDTH * 2.6 - ITEM_WIDTH_FOR_CENTER / 2 + LANE_MAGIC_OFFSET,
-  ROAD_LEFT_BORDER + ROAD_LANE_WIDTH * 3.6 - ITEM_WIDTH_FOR_CENTER / 2 + LANE_MAGIC_OFFSET + 10,
+  ROAD_LEFT_BORDER + ROAD_LANE_WIDTH * 0.5 - ITEM_WIDTH_FOR_CENTER / 2 + LANE_MAGIC_OFFSET - 20,
+  ROAD_LEFT_BORDER + ROAD_LANE_WIDTH * 1.5 - ITEM_WIDTH_FOR_CENTER / 2 + LANE_MAGIC_OFFSET - 15,
+  ROAD_LEFT_BORDER + ROAD_LANE_WIDTH * 2.5 - ITEM_WIDTH_FOR_CENTER / 2 + LANE_MAGIC_OFFSET - 6,
+  ROAD_LEFT_BORDER + ROAD_LANE_WIDTH * 3.5 - ITEM_WIDTH_FOR_CENTER / 2 + LANE_MAGIC_OFFSET + 2,
 ];
 
 const DEVICE_DIRECTION_MULTIPLIER = Platform.select({
