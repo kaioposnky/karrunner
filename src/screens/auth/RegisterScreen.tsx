@@ -55,7 +55,7 @@ export const RegisterScreen = () => {
           placeholder="Digite seu nome de usuário"
           autoCapitalize="none"
         />
-        
+
         <ThemedText className="mb-2">E-mail</ThemedText>
         <ThemedInput
           className="mb-4"
@@ -75,8 +75,8 @@ export const RegisterScreen = () => {
         />
       </ThemedView>
       <ThemedView className={'w-70 mt-6 flex flex-row justify-center gap-x-8'}>
-        <ThemedButton title="Registrar" className="" onPress={handleRegister} />
-        <ThemedButton title="Logar" className="" onPress={goToLogin} />
+        <ThemedButton title="Logar" className="w-36" onPress={goToLogin} />
+        <ThemedButton title="Registrar" className="w-36" onPress={handleRegister} />
       </ThemedView>
     </ThemedView>
   );
