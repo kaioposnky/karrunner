@@ -33,24 +33,25 @@ export const calculatePlayerNewXPosition = (
 
 export const checkPlayerColisions = (
   playerCar: PlayerCar,
-  obstacles: Obstacle[]
+  obstacles: Obstacle[],
+  deadzoneX?: number,
+  deadzoneY?: number
 ): boolean => {
   for (const obstacle of obstacles) {
-    if (checkPlayerAreaWithObstacle(playerCar, obstacle)){
+    if (checkPlayerAreaWithObstacle(playerCar, obstacle, deadzoneX, deadzoneY)){
       return true;
     };
   }
   return false;
 };
 
-const HEIGHT_DEADZONE = 5;
 // Checa a colisão do jogador com um objeto, a lógica é:
 // Se esquerda do carro estiver menor do que a direita do objeto
 // E se a direita do carro estiver maior do que a esquerda do objeto
 // E se a altura do topo do carro estiver maior do que a altura da base do objeto
 // E se a altura da base do carro estiver menor do que a altura do topo do objeto
 // Ele colide com o objeto (colisão 2D)
-const checkPlayerAreaWithObstacle = (playerCar: PlayerCar, obstacle: Obstacle) => {
+const checkPlayerAreaWithObstacle = (playerCar: PlayerCar, obstacle: Obstacle, deadzoneX?: number, deadzoneY?: number) => {
   const carLeftPointX = playerCar.x - (playerCar.width / 2);
   const carRightPointX = playerCar.x + (playerCar.width / 2);
 
@@ -62,9 +63,11 @@ const checkPlayerAreaWithObstacle = (playerCar: PlayerCar, obstacle: Obstacle) =
 
   const obstacleBottomPointY = obstacle.y;
   const obstacleTopPointY = obstacle.y + obstacle.height;
+  deadzoneX = deadzoneX || 0;
+  deadzoneY = deadzoneY || 0;
 
-  if((carLeftPointX <= obstacleRightPointX && carRightPointX >= obstacleLeftPointX)
-    && (carTopPointY + HEIGHT_DEADZONE >= obstacleBottomPointY && carBottomPointY + HEIGHT_DEADZONE <= obstacleTopPointY)){
+  if((carLeftPointX + deadzoneX <= obstacleRightPointX && carRightPointX - deadzoneX >= obstacleLeftPointX)
+    && (carTopPointY - deadzoneY >= obstacleBottomPointY && carBottomPointY + deadzoneY <= obstacleTopPointY)){
     return true;
   }
   return false;
