@@ -155,10 +155,14 @@ export const useGameEngine = (accelerometerData: AccelerometerMeasurement, selec
       // Mover e Limpar Obstáculos
       // ----------------------
 
-      obstaclesRef.current = obstaclesRef.current.map(
-        (o) => ({ ...o, y: o.y + OBSTACLE_SPEED }))
-        .filter((o) => o.y < SCREEN_HEIGHT + OBSTACLE_HEIGHT);
+      for (let i = obstaclesRef.current.length - 1; i >= 0; i--) {
+        const obstacle = obstaclesRef.current[i];
+        obstacle.y += OBSTACLE_SPEED;
 
+        if (obstacle.y >= SCREEN_HEIGHT + OBSTACLE_HEIGHT) {
+          obstaclesRef.current.splice(i, 1);
+        }
+      }
 
       // ----------------------
       // Verificar colisoes

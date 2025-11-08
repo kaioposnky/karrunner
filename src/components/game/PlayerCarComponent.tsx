@@ -1,8 +1,9 @@
 import { PlayerCar } from "@/types/Game";
 import { ThemedView } from "../themed/ThemedView";
 import { Image, StyleProp, ViewStyle } from "react-native";
+import { memo } from "react";
 
-export const PlayerCarComponent = ({ car, style }: { car: PlayerCar, style?: StyleProp<ViewStyle> }) => {
+export const PlayerCarComponent = memo(({ car, style }: { car: PlayerCar, style?: StyleProp<ViewStyle> }) => {
   return (
     <ThemedView disableBg style={style} className="">
       <Image
@@ -11,4 +12,4 @@ export const PlayerCarComponent = ({ car, style }: { car: PlayerCar, style?: Sty
       />
     </ThemedView>
   )
-};
+});

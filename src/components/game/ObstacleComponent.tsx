@@ -1,8 +1,9 @@
 import { Obstacle } from "@/types/Game";
 import { ThemedView } from "../themed/ThemedView";
 import { Image, StyleProp, ViewStyle } from "react-native";
+import { memo } from "react";
 
-export const ObstacleComponent = ({ obstacle, style, imageUrl }: { obstacle: Obstacle, style?: StyleProp<ViewStyle>, imageUrl?: string }) => {
+export const ObstacleComponent = memo(({ obstacle, style, imageUrl }: { obstacle: Obstacle, style?: StyleProp<ViewStyle>, imageUrl?: string }) => {
   return (
     <ThemedView disableBg style={style} className="">
       <Image
@@ -11,4 +12,4 @@ export const ObstacleComponent = ({ obstacle, style, imageUrl }: { obstacle: Obs
       />
     </ThemedView>
   )
-};
+});
