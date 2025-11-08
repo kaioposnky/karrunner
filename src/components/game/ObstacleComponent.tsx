@@ -1,14 +1,15 @@
+import { Obstacle } from "@/types/Game";
 import { ThemedView } from "../themed/ThemedView";
 import { Image, StyleProp, ViewStyle } from "react-native";
-import { Obstacle } from "@/hooks/useGameEngine";
+import { memo } from "react";
 
-export const ObstacleComponent = ({ obstacle, style }: { obstacle: Obstacle, style?: StyleProp<ViewStyle> }) => {
+export const ObstacleComponent = memo(({ obstacle, style, imageUrl }: { obstacle: Obstacle, style?: StyleProp<ViewStyle>, imageUrl?: string }) => {
   return (
-    <ThemedView disableBg style={style} className="border-t-stone-600 border-4">
+    <ThemedView disableBg style={style} className="">
       <Image
-        source={{ uri: "https://i.postimg.cc/zfnyVrCQ/hb20s.png"}}
-        style={{ width: obstacle.width, height: obstacle.height }}
+        source={{ uri: imageUrl || "https://i.postimg.cc/zfnyVrCQ/hb20s.png"}}
+        style={{ width: obstacle.width, height: obstacle.height, transform: [{ rotate: '180deg' }] }}
       />
     </ThemedView>
   )
-};
+});

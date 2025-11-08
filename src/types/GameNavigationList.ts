@@ -5,7 +5,7 @@ export type GameNavigationList = {
   GameMainMenu: undefined;
   CarSelectionScreen: undefined;
   CarSpinScreen: undefined;
-  PlayerStatsScreen: undefined;
+  UserProfileScreen: undefined;
   KarRunnerGameScreen: undefined;
 }
 export type GameNavigationProps = StackNavigationProp<GameNavigationList>;
