@@ -32,10 +32,6 @@ export const LeaderBoardScreen = () => {
     setLimit((prev) => prev + 5);
   };
 
-  const goBack = () => {
-    navigation.goBack();
-  };
-
   return (
     <ThemedView className="flex-1 items-center justify-center p-4">
       <ThemedText variant="title" className="mb-6">
@@ -44,7 +40,7 @@ export const LeaderBoardScreen = () => {
 
       <ThemedView className="w-full max-w-sm overflow-hidden rounded-lg border border-gray-200 shadow-md dark:border-gray-700">
         {/* Nomes das colunas */}
-        <ThemedView className="flex-row justify-between border-b border-gray-200 p-3 dark:border-gray-700 dark:bg-gray-800">
+        <ThemedView className="flex-row justify-between border-b border-gray-200 p-3 dark:border-gray-700 ">
           <ThemedText variant="subtitle" className="w-2/3 font-bold">
             Usuário
           </ThemedText>
@@ -68,8 +64,10 @@ export const LeaderBoardScreen = () => {
         ))}
       </ThemedView>
 
-      <ThemedButton title="Carregar Mais" onPress={handleLoadMore} className="mt-6" />
-      <GoBackButton/>
+      <ThemedView className='flex mt-6 gap-y-6'>
+        <ThemedButton title="Carregar Mais" onPress={handleLoadMore} className="mt-6" />
+        <GoBackButton/>
+      </ThemedView>
     </ThemedView>
   );
 };
