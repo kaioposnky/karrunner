@@ -5,6 +5,8 @@ import { UnregisteredUser } from '@/types/UnregisteredUser';
 import { getDatabase, ref, set } from 'firebase/database';
 import { addUserInitialCar } from './car';
 import { increaseUserBalance } from './user';
+import { FirebaseError } from 'firebase/app';
+import { evitavel } from "palavrao";
 
 export const login = async (email: string, password: string): Promise<User> => {
   try {
@@ -32,6 +34,10 @@ export const login = async (email: string, password: string): Promise<User> => {
 
 export const register = async (unregisteredUser: UnregisteredUser): Promise<User> => {
   try {
+    if(evitavel(unregisteredUser.displayName)){
+      throw new FirebaseError('profanity-displayName', "")
+    }
+
     // Cria o Usuário no Auth
     const userCredential = await createUserWithEmailAndPassword(auth, unregisteredUser.email, unregisteredUser.password);
     const user = userCredential.user;
@@ -68,6 +74,9 @@ export const register = async (unregisteredUser: UnregisteredUser): Promise<User
         break;
       case 'auth/weak-password':
         errorMessage = 'A senha deve ter pelo menos 6 caracteres.';
+        break;
+      case 'profanity-displayName':
+        errorMessage = 'Seu nome contêm palavras impróprias, insira outro nome.';
         break;
     }
 
