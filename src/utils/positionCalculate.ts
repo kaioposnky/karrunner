@@ -1,13 +1,13 @@
 import { Obstacle, PlayerCar } from "@/types/Game";
 
-export const calculatePlayerNewXPosition = (
+export const calculatePlayerNewPosition = (
   actualPosition: number,
   speed: number,
   spaceMovementConstant: number,
   maxSpeed: number,
   minSpeed: number,
-  borderLeft: number,
-  borderRight: number
+  border1: number,
+  border2: number
 ): number => {
   // Remove parte da aceleração para o carro não sair voando
   if (speed > maxSpeed){
@@ -23,10 +23,10 @@ export const calculatePlayerNewXPosition = (
   // Multiplicamos a velocidade pela constante de movimento
   const addedMovement = speed * spaceMovementConstant;
   const finalPosition = Math.round(actualPosition + addedMovement);
-  if (finalPosition < borderLeft) {
-    return borderLeft;
-  } else if (finalPosition > borderRight) {
-    return borderRight;
+  if (finalPosition < border1) {
+    return border1;
+  } else if (finalPosition > border2) {
+    return border2;
   }
   return finalPosition;
 };

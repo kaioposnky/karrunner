@@ -1,13 +1,17 @@
 import { AccelerometerMeasurement } from "expo-sensors";
 import { ThemedView } from "../themed/ThemedView";
 import { Car } from "@/types/Car";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { PlayerCarComponent } from "./PlayerCarComponent";
 import { useGameEngine } from "@/hooks/useGameEngine";
 import { ObstacleComponent } from "./ObstacleComponent";
-import { Image } from "react-native";
+import { Dimensions, Image } from "react-native";
 import roadImage from "@/assets/game/road.png";
 import { GameOverModal } from "./GameOverModal";
+import { ThemedText } from "../themed/ThemedText";
+import { AudioPlayer } from "@/utils/audioPlayer";
+const musicAudio = require('@/assets/game/kerosene.mp3');
+const carCrashAudio = require('@/assets/game/car_crash.mp3')
 
 interface KarRunnerGameProps {
   accelerometerData: AccelerometerMeasurement;
@@ -17,12 +21,42 @@ interface KarRunnerGameProps {
   allCars: Car[] | null;
 }
 
-// Carregue sua imagem da estrada (ajuste o caminho se necessário)
+const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 export const KarRunnerGame = ({ accelerometerData, selectedCar, onGameEnd, highScore, allCars }: KarRunnerGameProps) => {
   // Toda a lógica de atualização do jogo é feita pelo hook de Game Engine
   const { obstacles, playerCar, score, gameOver, roadPosition1, roadPosition2, restartGame } =
     useGameEngine(accelerometerData, selectedCar, true, allCars);
+  const musicPlayerRef = useRef<AudioPlayer | null>(null);
+  const carCrashRef = useRef<AudioPlayer | null>(null);
+
+  useEffect(() => {
+    const setupAudios = async () => {
+      musicPlayerRef.current = await AudioPlayer.create(musicAudio);
+      carCrashRef.current = await AudioPlayer.create(carCrashAudio);
+      musicPlayerRef.current.playLooped();
+    };
+
+    setupAudios();
+
+    return () => {
+      musicPlayerRef.current?.unload();
+      carCrashRef.current?.unload();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!musicPlayerRef.current || !carCrashRef.current) {
+      return;
+    }
+
+    if (gameOver) {
+      musicPlayerRef.current.stop();
+      carCrashRef.current.playFromStart();
+    } else {
+      musicPlayerRef.current.playLooped();
+    }
+  }, [gameOver]);
 
   useEffect(() => {
     if (gameOver) {
@@ -33,13 +67,22 @@ export const KarRunnerGame = ({ accelerometerData, selectedCar, onGameEnd, highS
 
   return (
     <ThemedView className="flex-1">
+      {/* Score do jogador atualizado em tempo real */}
+      <ThemedView
+        disableBg
+        className="absolutejustify-center items-center"
+        style={{ zIndex: 20, top: 30, right: 0, left: 0}}
+      >
+        <ThemedText className="text-5xl font-bold text-black"> {Math.round(score)} </ThemedText>
+      </ThemedView>
+
       {/* Imagens da estrada renderizadas primeiro para ficarem no fundo */}
       <Image
         source={roadImage}
         style={{
           position: 'absolute',
-          width: '100%',
-          height: '100%',
+          width: "100%",
+          height: SCREEN_HEIGHT,
           transform: [{ translateY: roadPosition1 }],
         }}
         resizeMode="cover"
@@ -48,8 +91,8 @@ export const KarRunnerGame = ({ accelerometerData, selectedCar, onGameEnd, highS
         source={roadImage}
         style={{
           position: 'absolute',
-          width: '100%',
-          height: '100%',
+          width: "100%",
+          height: SCREEN_HEIGHT,
           transform: [{ translateY: roadPosition2 }],
         }}
         resizeMode="cover"

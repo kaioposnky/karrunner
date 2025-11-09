@@ -8,7 +8,8 @@ interface IThemeButtonProps extends TouchableOpacityProps {
   variant?: 'primary' | 'secondary' | 'outline';
   border?: 'roundy' | 'round';
   className?: string;
-  title: string;
+  title?: string;
+  children?: React.ReactNode;
 }
 
 export const ThemedButton: FC<IThemeButtonProps> = ({
@@ -17,6 +18,7 @@ export const ThemedButton: FC<IThemeButtonProps> = ({
   size = 'medium',
   variant = 'primary',
   border = 'round',
+  children,
   ...props
 }) => {
   const { theme } = useTheme();
@@ -27,11 +29,15 @@ export const ThemedButton: FC<IThemeButtonProps> = ({
   const borderStyle = btnConfig.borders[border];
   const fontSizeStyle = (btnConfig as any).fontSizes[size];
 
+  const finalSizeStyle = children ? '' : sizeStyle;
+
   return (
     <TouchableOpacity
-      className={`${btnConfig.base} ${buttonStyle} ${sizeStyle} ${borderStyle} ${className}`}
+      className={`${btnConfig.base} ${buttonStyle} ${finalSizeStyle} ${borderStyle} ${className}`}
       {...props}>
-      <Text className={`text-center font-semibold ${textStyle} ${fontSizeStyle}`}>{title}</Text>
+      {children || (
+        <Text className={`text-center font-semibold ${textStyle} ${fontSizeStyle}`}>{title}</Text>
+      )}
     </TouchableOpacity>
   );
 };

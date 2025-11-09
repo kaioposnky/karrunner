@@ -1,5 +1,4 @@
 import { KarRunnerGame } from '@/components/game/KarRunnerGame';
-import { GoBackButton } from '@/components/themed/GoBackButton';
 import { ThemedText } from '@/components/themed/ThemedText';
 import { ThemedView } from '@/components/themed/ThemedView';
 import { useAuth } from '@/hooks/useAuth';
@@ -9,12 +8,15 @@ import { increaseUserBalance } from '@/service/user';
 import { Car } from '@/types/Car';
 import { User } from '@/types/User';
 import { startAccelerometer, webSimulatedAccelerometer } from '@/utils/accelerometer';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 import { AccelerometerMeasurement } from 'expo-sensors';
 import { useEffect, useState } from 'react';
-import { Platform } from 'react-native';
+import { Platform, TouchableOpacity } from 'react-native';
 
 export const KarRunnerGameScreen = () => {
   const { user } = useAuth();
+  const navigation = useNavigation();
   const [accelerometerData, setAccelerometerData] = useState<AccelerometerMeasurement | null>(null);
   const [selectedCar, setSelectedCar] = useState<Car | null>(null);
   const [highestScore, setHighestScore] = useState<number | null>(null);
@@ -38,8 +40,16 @@ export const KarRunnerGameScreen = () => {
     }
   }, [user]);
 
+  const handleGoBack = () => {
+    navigation.goBack();
+  };
+
   if (!accelerometerData || !selectedCar) {
-    return <ThemedText>Carregando...</ThemedText>;
+    return (
+      <ThemedView center="both">
+        <ThemedText>Carregando...</ThemedText>
+      </ThemedView>
+    );
   }
 
   const handleGameOver = (score: number) => {
@@ -55,25 +65,22 @@ export const KarRunnerGameScreen = () => {
 
   return (
     <ThemedView className="flex-1">
-      <GoBackButton
-        style={{ position: 'absolute', top: 50, left: 0, right: 0, zIndex: 2 }}
-      />
-      <ThemedView
-        center='both'
-        disableBg={true}
-        style={{ position: 'absolute', top: 50, left: 0, right: 0, zIndex: 1 }}
+      <TouchableOpacity
+        onPress={handleGoBack}
+        className="absolute w-20 h-20  bg-red-600 justify-center items-center"
+        style={{ zIndex: 10, backgroundColor: '#DC2626', top: 48, right: 16, borderRadius: 20 }}
       >
-        <ThemedText>X: {accelerometerData.x.toFixed(2)}</ThemedText>
-        <ThemedText>Y: {accelerometerData.y.toFixed(2)}</ThemedText>
-        <ThemedText>Z: {accelerometerData.z.toFixed(2)}</ThemedText>
-      </ThemedView>
+        <MaterialCommunityIcons name="home" size={40} color="white" />
+      </TouchableOpacity>
+
+      {/* O Jogo em si, que ocupa a tela toda */}
       <KarRunnerGame
         accelerometerData={accelerometerData}
         selectedCar={selectedCar}
         onGameEnd={handleGameOver}
         highScore={highestScore ?? 0}
         allCars={allCars}
-        />
+      />
     </ThemedView>
   );
 };

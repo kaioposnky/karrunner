@@ -24,8 +24,8 @@ export const GameOverModal = ({
       <View className={'flex-1 items-center justify-center bg-black/50'}>
         <ThemedView className={'p-8 rounded-2xl gap-y-4 items-center'}>
           <ThemedText variant="title">Fim de jogo, você bateu!</ThemedText>
-          <ThemedText className="text-2xl">Pontuação: <Text className="font-bold">{Math.ceil(score)}</Text></ThemedText>
-          <ThemedText className="text-xl">Maior Pontuação: <Text className="font-bold">{Math.ceil(highScore)}</Text></ThemedText>
+          <ThemedText className="text-2xl">Pontuação: <Text className="font-bold">{Math.round(score)}</Text></ThemedText>
+          <ThemedText className="text-xl">Maior Pontuação: <Text className="font-bold">{Math.round(highScore)}</Text></ThemedText>
           <ThemedButton title="Jogar novamente" onPress={onRestart} />
           <GoBackButton/>
         </ThemedView>

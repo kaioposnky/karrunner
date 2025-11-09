@@ -75,8 +75,8 @@ export const LoginScreen = () => {
         />
       </ThemedView>
       <ThemedView className={'w-70 mt-6 flex flex-row justify-center gap-x-8'}>
-        <ThemedButton title="Entrar" className="" onPress={handleLogin} />
-        <ThemedButton title="Registrar" className="" onPress={goToRegister} />
+        <ThemedButton title="Entrar" className="w-36" onPress={handleLogin} />
+        <ThemedButton title="Registrar" className="w-36" onPress={goToRegister} />
       </ThemedView>
     </ThemedView>
   );
