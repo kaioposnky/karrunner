@@ -1,7 +1,7 @@
 import { AccelerometerMeasurement } from "expo-sensors";
 import { ThemedView } from "../themed/ThemedView";
 import { Car } from "@/types/Car";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { PlayerCarComponent } from "./PlayerCarComponent";
 import { useGameEngine } from "@/hooks/useGameEngine";
 import { ObstacleComponent } from "./ObstacleComponent";
@@ -9,6 +9,9 @@ import { Dimensions, Image } from "react-native";
 import roadImage from "@/assets/game/road.png";
 import { GameOverModal } from "./GameOverModal";
 import { ThemedText } from "../themed/ThemedText";
+import { AudioPlayer } from "@/utils/audioPlayer";
+const musicAudio = require('@/assets/game/kerosene.mp3');
+const carCrashAudio = require('@/assets/game/car_crash.mp3')
 
 interface KarRunnerGameProps {
   accelerometerData: AccelerometerMeasurement;
@@ -24,6 +27,22 @@ export const KarRunnerGame = ({ accelerometerData, selectedCar, onGameEnd, highS
   // Toda a lógica de atualização do jogo é feita pelo hook de Game Engine
   const { obstacles, playerCar, score, gameOver, roadPosition1, roadPosition2, restartGame } =
     useGameEngine(accelerometerData, selectedCar, true, allCars);
+  const musicPlayerRef = useRef<AudioPlayer | null>(null);
+  const carCrashRef = useRef<AudioPlayer | null>(null);
+
+  useEffect(() => {
+    async function setupAudios() {
+      musicPlayerRef.current = await AudioPlayer.create(musicAudio);
+      musicPlayerRef.current.playLooped();
+      carCrashRef.current = await AudioPlayer.create(carCrashAudio);
+    }
+    if(!gameOver){
+      setupAudios();
+    } else if (gameOver){
+      musicPlayerRef.current?.stop();
+      carCrashRef.current?.playFromStart();
+    }
+  }, [gameOver])
 
   useEffect(() => {
     if (gameOver) {
