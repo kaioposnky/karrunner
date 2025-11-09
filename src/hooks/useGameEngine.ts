@@ -39,7 +39,7 @@ const ROAD_LEFT_BORDER = SCREEN_WIDTH * 0.05; // Tamanho da borda da esquerda do
 const ROAD_RIGHT_BORDER = SCREEN_WIDTH * 0.9; // Tamanho da borda direita do mapa
 const ROAD_WIDTH = ROAD_RIGHT_BORDER - ROAD_LEFT_BORDER;
 const ROAD_LANES = 4; // Quantidade de faixas da estrada
-const ROAD_SPEED = 5; // Velocidade da estrada
+const ROAD_SPEED = 10; // Velocidade da estrada
 const ROAD_LANE_WIDTH = ROAD_WIDTH / ROAD_LANES;
 const ITEM_WIDTH_FOR_CENTER = OBSTACLE_WIDTH;
 const LANE_POSITIONS = [ // Posições das faixas
@@ -55,6 +55,13 @@ const DEVICE_DIRECTION_MULTIPLIER = Platform.select({
   default: 1
 });
 
+const RARITY_SPEED_MULTIPLIER = {
+  common: 1,
+  rare: 1.1,
+  epic: 1.15,
+  legendary: 1.25,
+}
+
 export const useGameEngine = (accelerometerData: AccelerometerMeasurement, selectedCar: Car, shouldRun: boolean, allCars: Car[] | null) => {
 
   const getInitialPlayerCar = (selectedCar: Car) : PlayerCar  => {
@@ -69,7 +76,7 @@ export const useGameEngine = (accelerometerData: AccelerometerMeasurement, selec
 
   // Estados da estrada
   const [roadPosition1, setRoadPosition1] = useState<number>(0);
-  const [roadPosition2, setRoadPosition2] = useState<number>(-SCREEN_WIDTH);
+  const [roadPosition2, setRoadPosition2] = useState<number>(-SCREEN_HEIGHT);
 
   // Estados dos obstáculos
   const [obstacles, setObstacles] = useState<Obstacle[]>([]);
@@ -81,11 +88,14 @@ export const useGameEngine = (accelerometerData: AccelerometerMeasurement, selec
   const [score, setScore] = useState<number>(0);
   const [gameOver, setGameOver] = useState<boolean>(false);
 
+  // Referências para atualização no frame
   const playerCarRef = useRef(getInitialPlayerCar(selectedCar));
   const obstaclesRef = useRef<Obstacle[]>([]);
   const obstaclesTimerRef = useRef<number>(OBSTACLE_GENERATION_INTERVAL);
   const scoreRef = useRef(0);
   const gameOverRef = useRef(false);
+  const roadPosition1Ref = useRef(0);
+  const roadPosition2Ref = useRef(-SCREEN_HEIGHT);
 
   // Obtêm uma pista aleatória para o carro dar spawn
   const randomLanePositionInRoad = (): number => {
@@ -125,20 +135,25 @@ export const useGameEngine = (accelerometerData: AccelerometerMeasurement, selec
       // ----------------------
       // Mover a estrada no frame
       // ----------------------
+      roadPosition1Ref.current += ROAD_SPEED;
+      roadPosition2Ref.current += ROAD_SPEED;
 
-      // Removido por estar bugado
-      // setRoadPosition1(currentPos => {
-      //   return currentPos >= SCREEN_HEIGHT ? -SCREEN_HEIGHT : currentPos + ROAD_SPEED;
-      // });
-      // setRoadPosition2(currentPos => {
-      //   return currentPos >= SCREEN_HEIGHT ? -SCREEN_HEIGHT : currentPos + ROAD_SPEED;
-      // });
+      if (roadPosition1Ref.current >= SCREEN_HEIGHT) {
+        roadPosition1Ref.current = roadPosition2Ref.current - SCREEN_HEIGHT;
+      }
+      if (roadPosition2Ref.current >= SCREEN_HEIGHT) {
+        roadPosition2Ref.current = roadPosition1Ref.current - SCREEN_HEIGHT;
+      }
 
       // ----------------------
       // Mover carro no frame
       // ----------------------
 
-      const carSpeedX = accelerometerData.x * DEVICE_DIRECTION_MULTIPLIER;
+      // Multiplica o acelerômetro pelo sinal positivo ou negativo que o
+      // acelerômetro é multiplicado no android e ios, depois multiplica
+      // pelo multiplicador de velocidade da raridade do carro
+      const carSpeedX = accelerometerData.x *
+        DEVICE_DIRECTION_MULTIPLIER * RARITY_SPEED_MULTIPLIER[selectedCar.rarity];
 
       // Atualiza a posição do carro, considerando os limites da estrada
       playerCarRef.current.x = calculatePlayerNewXPosition(
@@ -222,8 +237,10 @@ export const useGameEngine = (accelerometerData: AccelerometerMeasurement, selec
       setPlayerCar({ ...playerCarRef.current });
       setObstacles([...obstaclesRef.current]);
       setScore(scoreRef.current);
+      setRoadPosition1(roadPosition1Ref.current);
+      setRoadPosition2(roadPosition2Ref.current);
 
-       animationFrame = requestAnimationFrame(gameLoop);
+      animationFrame = requestAnimationFrame(gameLoop);
     };
 
     animationFrame = requestAnimationFrame(gameLoop);
@@ -241,11 +258,15 @@ export const useGameEngine = (accelerometerData: AccelerometerMeasurement, selec
     obstaclesRef.current = [];
     obstaclesTimerRef.current = OBSTACLE_GENERATION_INTERVAL;
     scoreRef.current = 0;
+    roadPosition1Ref.current = 0;
+    roadPosition2Ref.current = -SCREEN_HEIGHT;
 
     setGameOver(false);
     setPlayerCar(playerCarRef.current);
     setObstacles(obstaclesRef.current);
     setScore(scoreRef.current);
+    setRoadPosition1(roadPosition1Ref.current);
+    setRoadPosition2(roadPosition2Ref.current);
   }
 
   return {
