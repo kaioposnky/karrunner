@@ -8,6 +8,7 @@ import { ObstacleComponent } from "./ObstacleComponent";
 import { Dimensions, Image } from "react-native";
 import roadImage from "@/assets/game/road.png";
 import { GameOverModal } from "./GameOverModal";
+import { ThemedText } from "../themed/ThemedText";
 
 interface KarRunnerGameProps {
   accelerometerData: AccelerometerMeasurement;
@@ -33,6 +34,15 @@ export const KarRunnerGame = ({ accelerometerData, selectedCar, onGameEnd, highS
 
   return (
     <ThemedView className="flex-1">
+      {/* Score do jogador atualizado em tempo real */}
+      <ThemedView
+        disableBg
+        className="absolutejustify-center items-center"
+        style={{ zIndex: 20, top: 30, right: 0, left: 0}}
+      >
+        <ThemedText className="text-5xl font-bold text-black"> {Math.round(score)} </ThemedText>
+      </ThemedView>
+
       {/* Imagens da estrada renderizadas primeiro para ficarem no fundo */}
       <Image
         source={roadImage}

@@ -8,13 +8,15 @@ interface IThemeTextProps extends TextProps{
 }
 
 export const ThemedText: FC<IThemeTextProps> = ({
-  variant, children, className, ...props
+  variant, children, className = '', ...props
                                                 }) => {
   const {theme} = useTheme();
 
   const textConfig = themeConfig.text;
   const textStyle = variant ? textConfig.variants[variant] : '';
-  const textColor = textConfig.colors[theme];
+
+  const hasColorClass = className.includes('text-');
+  const textColor = hasColorClass ? '' : textConfig.colors[theme];
 
   return (
     <Text
