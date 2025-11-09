@@ -39,6 +39,10 @@ export class AudioPlayer {
 
   async stop() {
     try {
+      const status = await this.#sound.getStatusAsync();
+      if(!status.isLoaded){
+        return;
+      }
       await this.#sound.stopAsync();
     } catch (error) {
       console.error("Erro ao parar o áudio:", error);
@@ -51,5 +55,10 @@ export class AudioPlayer {
     } catch (error) {
       console.error("Erro ao descarregar o áudio:", error);
     }
+  }
+
+  async isLoaded() {
+    const status = await this.#sound.getStatusAsync();
+    return status.isLoaded;
   }
 }

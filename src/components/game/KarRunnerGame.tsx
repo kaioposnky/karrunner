@@ -31,18 +31,32 @@ export const KarRunnerGame = ({ accelerometerData, selectedCar, onGameEnd, highS
   const carCrashRef = useRef<AudioPlayer | null>(null);
 
   useEffect(() => {
-    async function setupAudios() {
+    const setupAudios = async () => {
       musicPlayerRef.current = await AudioPlayer.create(musicAudio);
-      musicPlayerRef.current.playLooped();
       carCrashRef.current = await AudioPlayer.create(carCrashAudio);
+      musicPlayerRef.current.playLooped();
+    };
+
+    setupAudios();
+
+    return () => {
+      musicPlayerRef.current?.unload();
+      carCrashRef.current?.unload();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!musicPlayerRef.current || !carCrashRef.current) {
+      return;
     }
-    if(!gameOver){
-      setupAudios();
-    } else if (gameOver){
-      musicPlayerRef.current?.stop();
-      carCrashRef.current?.playFromStart();
+
+    if (gameOver) {
+      musicPlayerRef.current.stop();
+      carCrashRef.current.playFromStart();
+    } else {
+      musicPlayerRef.current.playLooped();
     }
-  }, [gameOver])
+  }, [gameOver]);
 
   useEffect(() => {
     if (gameOver) {
