@@ -1,7 +1,7 @@
 import { Car } from "@/types/Car";
 import { Obstacle, PlayerCar } from "@/types/Game";
 import {
-  calculatePlayerNewXPosition,
+  calculatePlayerNewPosition,
   checkPlayerColisions,
 } from "@/utils/positionCalculate";
 import { AccelerometerMeasurement } from "expo-sensors";
@@ -19,12 +19,14 @@ const GAME_TICKS_IN_MS = 1000 / FRAME_RATE;
 // Constantes do jogador
 const PLAYER_CAR_WIDTH = 60;
 const PLAYER_CAR_HEIGHT = 60;
-const PLAYER_CAR_START_Y = -65 + SCREEN_HEIGHT - PLAYER_CAR_HEIGHT * 2; // Posição inicial Y do carro
 const PLAYER_CAR_MAX_SPEED = 0.7; // Não passa de 0.5 e -0.5, limite do acelerômetro
 const PLAYER_CAR_MIN_SPEED = 0.05; // Não passa de 0.1 e -0.1, deadzone do acelerômetro
-const PLAYER_CAR_SPACE_MOVEMENT_CONSTANT = 10; // Sensibilidade do movimento do carro
+const PLAYER_CAR_SPACE_MOVEMENT_X_CONSTANT = 10; // Sensibilidade do movimento do carro no eixo X
+const PLAYER_CAR_SPACE_MOVEMENT_Y_CONSTANT = 5; // Sensibilidade do movimento do carro no eixo Y
 const PLAYER_HITBOX_X_DEADZONE = 35;
 const PLAYER_HITBOX_Y_DEADZONE = 37;
+const PLAYER_BOTTOM_BORDER = -65 + SCREEN_HEIGHT - PLAYER_CAR_HEIGHT * 2; // Limite inferior do movimento
+const PLAYER_TOP_BORDER = SCREEN_HEIGHT / 2; // Limite superior do movimento (meio da tela)
 
 // Constantes dos Objetos do mapa
 const OBSTACLE_WIDTH = 60;
@@ -68,7 +70,7 @@ export const useGameEngine = (accelerometerData: AccelerometerMeasurement, selec
     return {
       carInfo: selectedCar,
         x: 0,
-          y: PLAYER_CAR_START_Y,
+          y: PLAYER_BOTTOM_BORDER,
             width: PLAYER_CAR_WIDTH,
               height: PLAYER_CAR_HEIGHT
     }
@@ -154,16 +156,29 @@ export const useGameEngine = (accelerometerData: AccelerometerMeasurement, selec
       // pelo multiplicador de velocidade da raridade do carro
       const carSpeedX = accelerometerData.x *
         DEVICE_DIRECTION_MULTIPLIER * RARITY_SPEED_MULTIPLIER[selectedCar.rarity];
+      const carSpeedY = (accelerometerData.y - 0.2) *
+        DEVICE_DIRECTION_MULTIPLIER * RARITY_SPEED_MULTIPLIER[selectedCar.rarity];
 
       // Atualiza a posição do carro, considerando os limites da estrada
-      playerCarRef.current.x = calculatePlayerNewXPosition(
+      playerCarRef.current.x = calculatePlayerNewPosition(
         playerCarRef.current.x,
         carSpeedX,
-        PLAYER_CAR_SPACE_MOVEMENT_CONSTANT,
+        PLAYER_CAR_SPACE_MOVEMENT_X_CONSTANT,
         PLAYER_CAR_MAX_SPEED,
         PLAYER_CAR_MIN_SPEED,
         ROAD_LEFT_BORDER,
         SCREEN_WIDTH * 0.80 // NÃO PERGUNTE SOBRE ESSE NÚMERO, APENAS ACEITE
+      );
+
+      // Atualiza a posição do carro, considerando os limites propostos de altura
+      playerCarRef.current.y = calculatePlayerNewPosition(
+        playerCarRef.current.y,
+        carSpeedY,
+        -PLAYER_CAR_SPACE_MOVEMENT_Y_CONSTANT,
+        PLAYER_CAR_MAX_SPEED,
+        PLAYER_CAR_MIN_SPEED,
+        PLAYER_TOP_BORDER,
+        PLAYER_BOTTOM_BORDER
       );
 
       // ----------------------
