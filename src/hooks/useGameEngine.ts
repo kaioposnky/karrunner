@@ -23,8 +23,8 @@ const PLAYER_CAR_MAX_SPEED = 0.7; // Não passa de 0.5 e -0.5, limite do aceler�
 const PLAYER_CAR_MIN_SPEED = 0.05; // Não passa de 0.1 e -0.1, deadzone do acelerômetro
 const PLAYER_CAR_SPACE_MOVEMENT_X_CONSTANT = 10; // Sensibilidade do movimento do carro no eixo X
 const PLAYER_CAR_SPACE_MOVEMENT_Y_CONSTANT = 5; // Sensibilidade do movimento do carro no eixo Y
-const PLAYER_HITBOX_X_DEADZONE = 35;
-const PLAYER_HITBOX_Y_DEADZONE = 37;
+const PLAYER_HITBOX_X_DEADZONE = 32;
+const PLAYER_HITBOX_Y_DEADZONE = 30;
 const PLAYER_BOTTOM_BORDER = -65 + SCREEN_HEIGHT - PLAYER_CAR_HEIGHT * 2; // Limite inferior do movimento
 const PLAYER_TOP_BORDER = SCREEN_HEIGHT / 2; // Limite superior do movimento (meio da tela)
 
@@ -33,7 +33,7 @@ const OBSTACLE_WIDTH = 60;
 const OBSTACLE_HEIGHT = 60;
 const OBSTACLE_START_Y_POSITION = -100;
 const OBSTACLE_GENERATION_INTERVAL = 250; // Intervalo de tempo entre a geração de obstáculos em ms
-const OBSTACLE_SPEED = 5; // Velocidade dos obstáculos
+const OBSTACLE_INITIAL_SPEED = 4; // Velocidade dos obstáculos
 
 // Constantes da estrada
 const LANE_MAGIC_OFFSET = -8;
@@ -94,6 +94,7 @@ export const useGameEngine = (accelerometerData: AccelerometerMeasurement, selec
   const playerCarRef = useRef(getInitialPlayerCar(selectedCar));
   const obstaclesRef = useRef<Obstacle[]>([]);
   const obstaclesTimerRef = useRef<number>(OBSTACLE_GENERATION_INTERVAL);
+  const obstacleSpeedRef = useRef(OBSTACLE_INITIAL_SPEED);
   const scoreRef = useRef(0);
   const gameOverRef = useRef(false);
   const roadPosition1Ref = useRef(0);
@@ -187,12 +188,14 @@ export const useGameEngine = (accelerometerData: AccelerometerMeasurement, selec
 
       for (let i = obstaclesRef.current.length - 1; i >= 0; i--) {
         const obstacle = obstaclesRef.current[i];
-        obstacle.y += OBSTACLE_SPEED;
+        obstacle.y += obstacleSpeedRef.current;
 
         if (obstacle.y >= SCREEN_HEIGHT + OBSTACLE_HEIGHT) {
           obstaclesRef.current.splice(i, 1);
         }
       }
+
+      obstacleSpeedRef.current += 0.001;
 
       // ----------------------
       // Verificar colisoes
@@ -226,7 +229,11 @@ export const useGameEngine = (accelerometerData: AccelerometerMeasurement, selec
           imageUrl: randomCarImage || "https://i.postimg.cc/zfnyVrCQ/hb20s.png"
         };
         obstaclesRef.current.push(newObstacle);
-        obstaclesTimerRef.current = OBSTACLE_GENERATION_INTERVAL;
+        const speedIncrease = obstacleSpeedRef.current - OBSTACLE_INITIAL_SPEED;
+        const intervalReduction = speedIncrease * 8;
+        const newInterval = OBSTACLE_GENERATION_INTERVAL - intervalReduction;
+
+        obstaclesTimerRef.current = Math.max(12, newInterval);
       }
 
       // ----------------------
@@ -275,6 +282,7 @@ export const useGameEngine = (accelerometerData: AccelerometerMeasurement, selec
     scoreRef.current = 0;
     roadPosition1Ref.current = 0;
     roadPosition2Ref.current = -SCREEN_HEIGHT;
+    obstacleSpeedRef.current = OBSTACLE_INITIAL_SPEED;
 
     setGameOver(false);
     setPlayerCar(playerCarRef.current);
