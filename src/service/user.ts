@@ -1,5 +1,5 @@
 import { User } from '@/types/User';
-import { get, getDatabase, ref, update } from 'firebase/database';
+import { get, getDatabase, ref, update, query, orderByChild, equalTo } from 'firebase/database';
 import { getCarById } from './car';
 import { Car } from '@/types/Car';
 
@@ -77,4 +77,20 @@ export async function userProfileToUser(userProfile: UserProfileFromDB): Promise
   };
 
   return user;
+}
+
+export async function getUserByDisplayName(displayName: string): Promise<UserProfileFromDB | null> {
+  const db = getDatabase();
+  const usersRef = ref(db, 'users');
+  const q = query(usersRef, orderByChild('displayName'), equalTo(displayName));
+
+  const snapshot = await get(q);
+
+  if (snapshot.exists()) {
+    const users = snapshot.val();
+    const userId = Object.keys(users)[0];
+    return users[userId] as UserProfileFromDB;
+  }
+
+  return null;
 }

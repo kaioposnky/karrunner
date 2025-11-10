@@ -4,7 +4,7 @@ import { createPlayerScore } from './score';
 import { UnregisteredUser } from '@/types/UnregisteredUser';
 import { getDatabase, ref, set } from 'firebase/database';
 import { addUserInitialCar } from './car';
-import { increaseUserBalance } from './user';
+import { getUserByDisplayName, increaseUserBalance } from './user';
 import { FirebaseError } from 'firebase/app';
 import { evitavel } from "palavrao";
 
@@ -35,10 +35,16 @@ export const login = async (email: string, password: string): Promise<User> => {
 export const register = async (unregisteredUser: UnregisteredUser): Promise<User> => {
   try {
     if(evitavel(unregisteredUser.displayName)){
-      throw new FirebaseError('profanity-displayName', "")
+      throw new FirebaseError('auth/profanity-display-name', "Seu nome contêm palavras impróprias, insira outro nome.")
     }
 
-    // Cria o Usuário no Auth
+    // Se existir um usuário com o mesmo nome
+    const existingUser = await getUserByDisplayName(unregisteredUser.displayName);
+    if (existingUser) {
+      throw new FirebaseError('auth/display-name-already-in-use', "Este nome de usuário já está em uso.");
+    }
+
+    // Create user in Auth
     const userCredential = await createUserWithEmailAndPassword(auth, unregisteredUser.email, unregisteredUser.password);
     const user = userCredential.user;
 
@@ -75,8 +81,11 @@ export const register = async (unregisteredUser: UnregisteredUser): Promise<User
       case 'auth/weak-password':
         errorMessage = 'A senha deve ter pelo menos 6 caracteres.';
         break;
-      case 'profanity-displayName':
+      case 'auth/profanity-display-name':
         errorMessage = 'Seu nome contêm palavras impróprias, insira outro nome.';
+        break;
+      case 'auth/display-name-already-in-use':
+        errorMessage = 'Este nome de usuário já está em uso.';
         break;
     }
 
