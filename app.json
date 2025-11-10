@@ -3,27 +3,23 @@
     "name": "Kar Runner",
     "slug": "karrunner",
     "version": "1.0.0",
-
     "web": {
       "favicon": "./src/assets/favicon.png"
     },
-
     "experiments": {
       "tsconfigPaths": true
     },
-
     "plugins": [],
-
     "orientation": "portrait",
     "icon": "./src/assets/icon.png",
-
     "userInterfaceStyle": "light",
-
     "splash": {
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true
     },
@@ -31,6 +27,12 @@
       "adaptiveIcon": {
         "foregroundImage": "./src/assets/icon.png",
         "backgroundColor": "#ffffff"
+      },
+      "package": "com.okaio.karrunner"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "3f1bc852-c968-4fa6-864a-beada15dd957"
       }
     }
   }
