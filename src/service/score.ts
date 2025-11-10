@@ -49,12 +49,15 @@ export async function getAllScores(limit?: number): Promise<UserScore[]> {
       if (!snapshot.exists()) {
         return [];
       }
-      const scoresData = snapshot.val();
-      // Convert the object of scores into an array
-      const scoresArray = Object.keys(scoresData).map((key) => ({
-        id: key,
-        ...scoresData[key],
-      }));
+
+      const scoresArray: UserScore[] = [];
+      snapshot.forEach((childSnapshot) => {
+        scoresArray.push({
+          id: childSnapshot.key!,
+          ...childSnapshot.val(),
+        });
+      });
+
       return scoresArray.reverse();
     })
     .catch((error: any) => {
