@@ -35,7 +35,7 @@ O aplicativo é dividido em várias áreas principais:
 - **Ranking Global:** Compare sua pontuação com a de todos os outros jogadores.
 - **Competição:** Veja quem está no topo e tente alcançá-los!
 
-*(insira um screenshot da tela de leaderboard aqui)*
+[![Imagem Leaderboard](https://i.postimg.cc/XNyWSLB8/Imagem-do-Whats-App-de-2025-11-11-a-s-19-03-54-6b3fc66e.jpg)](https://postimg.cc/w3HZDhVy)
 
 ### 5. 🚗 Seleção de Carros
 - **Escolha seu Veículo:** Na tela de seleção, você pode ver todos os carros disponíveis no jogo e quais você já desbloqueou.
